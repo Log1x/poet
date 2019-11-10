@@ -34,14 +34,18 @@ For additional configuration values, see the [Extended CPTs](https://github.com/
 
 **Note**: Do not nest configuration in a `'config'` key like shown on Extended CPTs.
 
-### Example for enabling the built-in `WP_Block` post type.
+#### Extending a Post Type or Taxonomy
+
+Extending a post type or taxonomy is as simple as adding a new one. Simply just pass it arguments you would otherwise use while registering and Poet will do the rest.
+
+Below is an example for enabling the built-in `wp_block` post type in the menu as well as assigning it a more fitting icon.
 
 ```php
 'post' => [
     'wp_block' => [
+        '_builtin'     => false,
         'show_in_menu' => true,
         'menu_icon'    => 'dashicons-layout',
-        '_builtin'     => false,
     ],
 ],
 ```
