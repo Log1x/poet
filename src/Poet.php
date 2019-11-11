@@ -98,7 +98,7 @@ class Poet
     /**
      * Checks if the passed object is a valid WP_Post_Type or WP_Taxonomy instance.
      *
-     * @param  object $object
+     * @param  mixed $object
      * @return bool
      */
     protected function verify($object)
