@@ -69,6 +69,7 @@ class Poet
     /**
      * Checks if a post type or taxonomy already exists.
      *
+     * @param  string $name
      * @return bool
      */
     protected function exists($name)
@@ -79,8 +80,9 @@ class Poet
     /**
      * Modifies an existing post type or taxonomy object.
      *
-     * @param string $name
-     * @param array  $config
+     * @param  string $name
+     * @param  array  $config
+     * @return void
      */
     protected function modify($name, $config)
     {
