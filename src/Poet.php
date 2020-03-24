@@ -22,16 +22,24 @@ class Poet
     protected $taxonomy;
 
     /**
+     * Returns the configured blocks for the application.
+     *
+     * @var array
+     */
+    protected $block;
+
+    /**
      * Create a new Poet instance.
      *
      * @param  array $post
      * @param  array $taxonomy
      * @return void
      */
-    public function __construct($post = [], $taxonomy = [])
+    public function __construct($post = [], $taxonomy = [], $block = [])
     {
         $this->post = $post;
         $this->taxonomy = $taxonomy;
+        $this->block = $block;
 
         add_action('init', function () {
             $this->register();
@@ -45,7 +53,6 @@ class Poet
      */
     protected function register()
     {
-        // phpcs:disable
         collect($this->post)
             ->each(function ($config = [], $key) {
                 if ($this->exists($key)) {
@@ -63,13 +70,34 @@ class Poet
 
                 register_extended_taxonomy($key, $config['links'] ?? 'post', $config, $config['labels'] ?? []);
             });
-        // phpcs:enable
+
+        collect($this->block)
+            ->each(function ($config = [], $key) {
+                if (! Str::contains($key, '/')) {
+                    $key = Str::start($key, 'block/');
+                }
+
+                $config = collect($config);
+
+                register_block_type($key, [
+                    'render_callback' => function ($data, $content) use ($key, $config) {
+                        return view($config->get('view', 'blocks.' . Str::after($key, '/')), [
+                            'data' => (object) $data,
+                            'content' => $config->get('strip', true) ? $content :
+                                ! empty(
+                                    wp_strip_all_tags($content, true)
+                                )
+                            ? $content : null
+                        ]);
+                    },
+                    'attributes' => $config->get('attributes', [])
+                ]);
+            });
     }
 
     /**
      * Checks if a post type or taxonomy already exists.
      *
-     * @param  string $name
      * @return bool
      */
     protected function exists($name)
@@ -80,9 +108,8 @@ class Poet
     /**
      * Modifies an existing post type or taxonomy object.
      *
-     * @param  string $name
-     * @param  array  $config
-     * @return void
+     * @param string $name
+     * @param array  $config
      */
     protected function modify($name, $config)
     {
@@ -100,7 +127,7 @@ class Poet
     /**
      * Checks if the passed object is a valid WP_Post_Type or WP_Taxonomy instance.
      *
-     * @param  mixed $object
+     * @param  object $object
      * @return bool
      */
     protected function verify($object)

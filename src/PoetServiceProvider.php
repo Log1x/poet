@@ -16,7 +16,8 @@ class PoetServiceProvider extends ServiceProvider
         $this->app->singleton('Log1x\Poet', function () {
             return new Poet(
                 $this->app->config->get('poet.post', []),
-                $this->app->config->get('poet.taxonomy', [])
+                $this->app->config->get('poet.taxonomy', []),
+                $this->app->config->get('poet.blocks', [])
             );
         });
     }

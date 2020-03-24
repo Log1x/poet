@@ -42,4 +42,29 @@ return [
             'meta_box' => 'radio',
         ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Blocks
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the block types to be registered by Poet and
+    | rendered using Blade.
+    |
+    | Blocks are registered using the `namespace/label` defined when
+    | registering the block with the editor.
+    |
+    | Given the Block `sage/accordion`, your Block view would be located at:
+    |   ↪ `views/blocks/accordion.blade.php`
+    |
+    | Block views have the following variables available:
+    |   ↪ $data    – An object containing the block data.
+    |   ↪ $content – A string containing the InnerBlocks content.
+    |                Returns `null` when empty.
+    |
+    */
+
+    'block' => [
+        // 'sage/accordion'
+    ],
 ];
