@@ -54,7 +54,9 @@ class Poet
     protected function register()
     {
         collect($this->post)
-            ->each(function ($config = [], $key) {
+            ->each(function ($config, $key) {
+                $config = $config ?? [];
+
                 if ($this->exists($key)) {
                     return $this->modify($key, $config);
                 }
@@ -63,7 +65,9 @@ class Poet
             });
 
         collect($this->taxonomy)
-            ->each(function ($config = [], $key) {
+            ->each(function ($config, $key) {
+                $config = $config ?? [];
+
                 if ($this->exists($key)) {
                     return $this->modify($key, $config);
                 }
@@ -72,12 +76,12 @@ class Poet
             });
 
         collect($this->block)
-            ->each(function ($config = [], $key) {
+            ->each(function ($config, $key) {
+                $config = collect($config ?? []);
+
                 if (! Str::contains($key, '/')) {
                     $key = Str::start($key, 'block/');
                 }
-
-                $config = collect($config);
 
                 register_block_type($key, [
                     'render_callback' => function ($data, $content) use ($key, $config) {
