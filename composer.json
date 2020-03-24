@@ -10,9 +10,7 @@
     }
   ],
   "keywords": [
-    "wordpress",
-    "custom-post-types",
-    "custom-taxonomies"
+    "wordpress"
   ],
   "support": {
     "issues": "https://github.com/log1x/poet/issues"
@@ -23,7 +21,7 @@
     }
   },
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.2.5",
     "johnbillion/extended-cpts": "^4.3"
   },
   "require-dev": {
