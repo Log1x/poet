@@ -13,7 +13,7 @@ If the passed post type or taxonomy already exists, Poet will automatically modi
 ## Requirements
 
 - [Sage](https://github.com/roots/sage) >= 10.0
-- [PHP](https://secure.php.net/manual/en/install.php) >= 7.2
+- [PHP](https://secure.php.net/manual/en/install.php) >= 7.2.5
 - [Composer](https://getcomposer.org/download/)
 
 ## Installation
@@ -111,7 +111,59 @@ Below is an example for enabling the built-in `wp_block` post type in the menu a
 
 Poet provides an easy way to register a Gutenberg block with the editor using an accompanying blade view for rendering the block on the frontend.
 
-Blocks are registered using the `namespace/label` defined when [registering the block with the editor](https://developer.wordpress.org/block-editor/developers/block-api/block-registration/#registerblocktype). If no namespace is provided, the current theme text domain will be used instead.
+Blocks are registered using the `namespace/label` defined when [registering the block with the editor](https://developer.wordpress.org/block-editor/developers/block-api/block-registration/#registerblocktype). If no namespace is provided, the current theme's [text domain](https://developer.wordpress.org/themes/functionality/internationalization/#loading-text-domain) will be used instead.
+
+```php
+'block' => [
+    'sage/accordion'
+],
+```
+
+Given the Block `sage/accordion`, your Block view would be located at `views/blocks/accordion.blade.php`.
+
+Block views have the following variables available:
+
+- `$data` – An object containing the block data.
+- `$content` – A string containing the InnerBlocks content. Returns `null` when empty.
+
+By default, when checking if `$content` is empty, it is passed through a method to remove all tags and whitespace before evaluating. In most cases, not doing this will cause `$content` to always return `true`.
+
+If you do not want this behavior on a particular block, simply register it as an array:
+
+```php
+'block' => [
+    'sage/accordion' => ['strip' => false]
+],
+```
+
+Consider an accordion block that is registered with a `title` and `className` attribute. Your view might look something like this:
+
+```php
+<div class="wp-block-accordion {{ $data->className ?? '' }}">
+  @isset ($data->title)
+    <h2>{!! $data->title !!}</h2>
+  @endisset
+
+  <div>
+    {!! $content ?? 'Please feed me InnerBlocks.' !!}
+  </div>
+</div>
+```
+
+If you need to register block attributes using PHP on a particular block, simply pass the attributes in an array when registering the block:
+
+```php
+'block' => [
+    'sage/accordion' => [
+        'attributes' => [
+            'title' => [
+                'default' => 'Lorem ipsum',
+                'type' => 'string',
+            ],
+        ],
+    ],
+],
+```
 
 ## Bug Reports
 
