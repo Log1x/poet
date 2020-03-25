@@ -52,7 +52,8 @@ return [
     | rendered using Blade.
     |
     | Blocks are registered using the `namespace/label` defined when
-    | registering the block with the editor.
+    | registering the block with the editor. If no namespace is provided,
+    | the current theme text domain will be used instead.
     |
     | Given the Block `sage/accordion`, your Block view would be located at:
     |   ↪ `views/blocks/accordion.blade.php`
