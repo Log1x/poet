@@ -26,13 +26,13 @@ $ composer require log1x/poet
 
 ## Usage
 
-Publish the example configuration using:
+Start with publishing the Poet configuration file using Acorn:
 
 ```bash
 $ wp acorn vendor:publish --provider="Log1x\Poet\PoetServiceProvider"
 ```
 
-### Creating a Post Type
+### Registering a Post Type
 
 All configuration related to Poet is located in `config/poet.php`. Here you will find an example Book post type pre-configured with a few common settings:
 
@@ -52,7 +52,7 @@ All configuration related to Poet is located in `config/poet.php`. Here you will
 ],
 ```
 
-In it's simplest form, a post type can be created by simply passing a string.
+In it's simplest form, a post type can be created by simply passing a string:
 
 ```php
 'post' => [
@@ -60,13 +60,29 @@ In it's simplest form, a post type can be created by simply passing a string.
 ],
 ```
 
-To see additional configuration options for post types, take a look at [`register_post_type()`](https://developer.wordpress.org/reference/functions/register_post_type/) and [`register_extended_post_type()`](https://github.com/johnbillion/extended-cpts/wiki/Registering-Post-Types).
+To modify an existing post type, simply treat it as if you are creating a new post type passing only the configuration options you wish to change:
 
-> **Note**: Do not nest configuration in a `'config'` key like shown in the Extended CPTs documentation.
+```php
+'post' => [
+    'post' => [
+        'labels' => [
+            'singular' => 'Article',
+            'plural' => 'Articles',
+        ],
+    ],
+],
+```
 
-## Creating a Taxonomy
+For additional configuration options for post types, please see:
 
-Creating a taxonomy is similar to a post type. Looking in `config/poet.php`, you will see a genre taxonomy accompanying the default book post type.
+- [`register_post_type()`](https://developer.wordpress.org/reference/functions/register_post_type/)
+- [`register_extended_post_type()`](https://github.com/johnbillion/extended-cpts/wiki/Registering-Post-Types).
+
+> **Note**: Do not nest configuration in a `config` key like shown in the Extended CPTs documentation.
+
+### Registering a Taxonomy
+
+Registering a taxonomy is similar to a post type. Looking in `config/poet.php`, you will see a Genre taxonomy accompanying the default Book post type:
 
 ```php
 'taxonomy' => [
@@ -77,41 +93,45 @@ Creating a taxonomy is similar to a post type. Looking in `config/poet.php`, you
 ],
 ```
 
-The most relevent configuration value is `links` which defines the post-type the taxonomy is connected to. If no link is specified, it will default to `post`.
+The most relevent configuration option is `links` which defines the post type the taxonomy is connected to. If no link is specified, it will default to `post`.
 
-In it's simplest form, you can simply pass a string to create a taxonomy for a post.
+In it's simplest form, you can simply pass a string. The example below would create a Topic taxonomy for the Post post type:
 
 ```php
 'taxonomy' => [
-    'genre',
+    'topic',
 ],
 ```
 
-To see additional configuration options for taxonomies, take a look at [`register_taxonomy()`](https://codex.wordpress.org/Function_Reference/register_taxonomy) and [`register_extended_taxonomy()`](https://github.com/johnbillion/extended-cpts/wiki/Registering-taxonomies).
-
-> **Note**: Do not nest configuration in a `'config'` key like shown in the Extended CPTs documentation.
-
-### Modifying an existing Post Type or Taxonomy
-
-Modifying an existing post type or taxonomy is similar to creating a new one. Simply pass the arguments you would otherwise use while registering and Poet will do the rest.
-
-Below is an example for enabling the built-in `wp_block` post type in the menu as well as assigning it a more fitting icon.
+As with post types, to modify an existing taxonomy, simply pass only the configuration options you wish to change:
 
 ```php
-'post' => [
-    'wp_block' => [
-        '_builtin'     => false,
-        'show_in_menu' => true,
-        'menu_icon'    => 'dashicons-layout',
+'taxonomy' => [
+    'category' => [
+        'labels' => [
+            'singular' => 'Section',
+            'plural' => 'Sections',
+        ],
     ],
 ],
 ```
 
+For additional configuration options for taxonomies, please see:
+
+- [`register_taxonomy()`](https://codex.wordpress.org/Function_Reference/register_taxonomy)
+- [`register_extended_taxonomy()`](https://github.com/johnbillion/extended-cpts/wiki/Registering-taxonomies).
+
+> **Note**: Do not nest configuration in a `config` key like shown in the Extended CPTs documentation.
+
 ### Registering a Block
 
-Poet provides an easy way to register a Gutenberg block with the editor using an accompanying blade view for rendering the block on the frontend.
+Poet provides an easy way to register a Gutenberg block with the editor using an accompanying Blade view for rendering the block on the frontend.
 
-Blocks are registered using the `namespace/label` defined when [registering the block with the editor](https://developer.wordpress.org/block-editor/developers/block-api/block-registration/#registerblocktype). If no namespace is provided, the current theme's [text domain](https://developer.wordpress.org/themes/functionality/internationalization/#loading-text-domain) will be used instead.
+Blocks are registered using the `namespace/label` defined when [registering the block with the editor](https://developer.wordpress.org/block-editor/developers/block-api/block-registration/#registerblocktype).
+
+If no namespace is provided, the current theme's [text domain](https://developer.wordpress.org/themes/functionality/internationalization/#loading-text-domain) will be used instead.
+
+Registering a block in most cases is as simple as:
 
 ```php
 'block' => [
@@ -119,14 +139,16 @@ Blocks are registered using the `namespace/label` defined when [registering the 
 ],
 ```
 
-Given the Block `sage/accordion`, your Block view would be located at `views/blocks/accordion.blade.php`.
+#### Creating a Block View
+
+Given the block `sage/accordion`, your accompanying Blade view would be located at `views/blocks/accordion.blade.php`.
 
 Block views have the following variables available:
 
 - `$data` – An object containing the block data.
 - `$content` – A string containing the InnerBlocks content. Returns `null` when empty.
 
-By default, when checking if `$content` is empty, it is passed through a method to remove all tags and whitespace before evaluating. In most cases, not doing this will cause `$content` to always return `true`.
+By default, when checking if `$content` is empty, it is passed through a method to remove all tags and whitespace before evaluating. This assures that editor bloat like `nbsp;` or empty `<p></p>` tags do not cause `$content` to always return `true` when used in a conditional.
 
 If you do not want this behavior on a particular block, simply register it as an array:
 
@@ -135,6 +157,23 @@ If you do not want this behavior on a particular block, simply register it as an
     'sage/accordion' => ['strip' => false]
 ],
 ```
+
+If you need to register block attributes using PHP on a particular block, simply pass the attributes in an array when registering:
+
+```php
+'block' => [
+    'sage/accordion' => [
+        'attributes' => [
+            'title' => [
+                'default' => 'Lorem ipsum',
+                'type' => 'string',
+            ],
+        ],
+    ],
+],
+```
+
+##### Example
 
 Consider an accordion block that is registered with a `title` and `className` attribute. Your view might look something like this:
 
@@ -148,21 +187,6 @@ Consider an accordion block that is registered with a `title` and `className` at
     {!! $content ?? 'Please feed me InnerBlocks.' !!}
   </div>
 </div>
-```
-
-If you need to register block attributes using PHP on a particular block, simply pass the attributes in an array when registering the block:
-
-```php
-'block' => [
-    'sage/accordion' => [
-        'attributes' => [
-            'title' => [
-                'default' => 'Lorem ipsum',
-                'type' => 'string',
-            ],
-        ],
-    ],
-],
 ```
 
 ## Bug Reports
