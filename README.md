@@ -173,8 +173,6 @@ If you need to register block attributes using PHP on a particular block, simply
 ],
 ```
 
-##### Example
-
 Consider an accordion block that is registered with a `title` and `className` attribute. Your view might look something like this:
 
 ```php
