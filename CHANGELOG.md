@@ -1,3 +1,17 @@
+## v1.0.3 (03/28/19)
+
+### Bug fixes
+
+- fix(block): Fix namespace TextDomain fallback returning empty
+- fix(post): Fix registering posts with only a string
+- fix(taxonomy): Fix registering taxonomies with only a string
+
+### Enhancements
+
+- enhance(poet): Clean up and seperate post type and taxonomy registration methods
+- enhance(poet): Use `Arr::get()` for handling array getters with fallback values
+- chore(config): Lowercase instances of "block"
+
 ## v1.0.2 (03/25/19)
 
 ### Enhancements

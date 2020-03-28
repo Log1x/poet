@@ -5,11 +5,12 @@ namespace Log1x\Poet;
 use WP_Post_Type;
 use WP_Taxonomy;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 
 class Poet
 {
     /**
-     * Returns the Poet configuration.
+     * The Poet configuration.
      *
      * @var array
      */
@@ -21,53 +22,73 @@ class Poet
      * @param  array $config
      * @return void
      */
-    public function __construct($config)
+    public function __construct($config = [])
     {
         $this->config = collect($config);
 
-        add_action('init', function () {
-            $this->registerTypes();
+        add_filter('init', function () {
+            $this->registerPosts();
+            $this->registerTaxonomies();
             $this->registerBlocks();
         }, 20);
     }
 
     /**
-     * Register the configured post types and taxomonies using Extended CPTs.
+     * Register the configured post types using Extended CPTs.
      *   ↪ https://github.com/johnbillion/extended-cpts
      *
-     * If a post type / taxonomy already exists, the object will be modified instead.
+     * If a post type already exists, the object will be modified instead.
      *   ↪ https://codex.wordpress.org/Function_Reference/get_post_type_object
-     *   ↪ https://developer.wordpress.org/reference/functions/get_taxonomy/
      *
      * @return void
      */
-    protected function registerTypes()
+    protected function registerPosts()
     {
-        $this->config->only(['post', 'taxonomy'])->each(function ($value, $type) {
-            foreach ($value as $key => $config) {
-                $config = collect($config);
-
-                if ($this->exists($key)) {
-                    if ($config->isEmpty()) {
-                        return;
-                    }
-
-                    return $this->modify($key, $config->all());
+        $this->config->only('post')->each(function ($post) {
+            foreach ($post as $key => $value) {
+                if (empty($key)) {
+                    return register_extended_post_type(...Arr::wrap($value));
                 }
 
-                if (Str::is($type, 'taxonomy')) {
-                    return register_extended_taxonomy(
-                        $key,
-                        $config->get('links', 'post'),
-                        $config->all(),
-                        $config->get('labels', [])
-                    );
+                if ($this->exists($key)) {
+                    return $this->modify($key, $value);
                 }
 
                 return register_extended_post_type(
                     $key,
-                    $config->all(),
-                    $config->get('labels', [])
+                    Arr::get($value, 'links', 'post'),
+                    Arr::get($value, 'labels', [])
+                );
+            }
+        });
+    }
+
+    /**
+     * Register the configured taxomonies using Extended CPTs.
+     *   ↪ https://github.com/johnbillion/extended-cpts
+     *
+     * If a taxonomy already exists, the object will be modified instead.
+     *   ↪ https://developer.wordpress.org/reference/functions/get_taxonomy/
+     *
+     * @return void
+     */
+    protected function registerTaxonomies()
+    {
+        $this->config->only('taxonomy')->each(function ($taxonomy) {
+            foreach ($taxonomy as $key => $value) {
+                if (empty($key)) {
+                    return register_extended_taxonomy($value, 'post');
+                }
+
+                if ($this->exists($key)) {
+                    return $this->modify($key, $value);
+                }
+
+                return register_extended_taxonomy(
+                    $key,
+                    Arr::get($value, 'links', 'post'),
+                    $value,
+                    Arr::get($value, 'labels', [])
                 );
             }
         });
@@ -166,7 +187,7 @@ class Poet
     protected function namespace($delimiter = '/')
     {
         return (Str::slug(
-            wp_get_theme()->get('text_domain')
+            wp_get_theme()->get('TextDomain')
         ) ?? 'sage') . $delimiter;
     }
 
