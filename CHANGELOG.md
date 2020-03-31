@@ -1,4 +1,8 @@
-## v1.0.3 (03/28/19)
+## v1.0.4 (03/31/20)
+
+- fix(block): Fix block registration
+
+## v1.0.3 (03/28/20)
 
 ### Bug fixes
 
@@ -12,7 +16,7 @@
 - enhance(poet): Use `Arr::get()` for handling array getters with fallback values
 - chore(config): Lowercase instances of "block"
 
-## v1.0.2 (03/25/19)
+## v1.0.2 (03/25/20)
 
 ### Enhancements
 
@@ -28,7 +32,7 @@
 - chore(docs): Improve README.md documentation
 - chore(license): Bump license to 2020.
 
-## v1.0.1 (03/24/19)
+## v1.0.1 (03/24/20)
 
 ### Enhancements
 
