@@ -45,7 +45,7 @@ class Poet
     protected function registerPosts()
     {
         $this->config->only('post')->each(function ($post) {
-            foreach ($post as $key => $value) {
+            return collect($post)->each(function ($value, $key) {
                 if (empty($key)) {
                     return register_extended_post_type(...Arr::wrap($value));
                 }
@@ -56,12 +56,10 @@ class Poet
 
                 return register_extended_post_type(
                     $key,
-                    Arr::wrap(
-                        Arr::get($value, 'links', 'post')
-                    ),
+                    $value,
                     Arr::get($value, 'labels', [])
                 );
-            }
+            });
         });
     }
 
@@ -77,7 +75,7 @@ class Poet
     protected function registerTaxonomies()
     {
         $this->config->only('taxonomy')->each(function ($taxonomy) {
-            foreach ($taxonomy as $key => $value) {
+            return collect($taxonomy)->each(function ($value, $key) {
                 if (empty($key)) {
                     return register_extended_taxonomy($value, 'post');
                 }
@@ -92,7 +90,7 @@ class Poet
                     $value,
                     Arr::get($value, 'labels', [])
                 );
-            }
+            });
         });
     }
 

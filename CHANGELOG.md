@@ -1,3 +1,7 @@
+## v1.0.6 (03/31/20)
+
+- fix(post): Actually fix post type registration
+
 ## v1.0.5 (03/31/20)
 
 - fix(post): Fix post type registration
