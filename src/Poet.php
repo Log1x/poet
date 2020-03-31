@@ -117,22 +117,28 @@ class Poet
      */
     protected function registerBlocks()
     {
-        return $this->config->only('block')->each(function ($config, $key) {
-            $config = collect($config);
+        return $this->config->only('block')->each(function ($block) {
+            foreach ($block as $key => $value) {
+                if (empty($key)) {
+                    $key = $value;
+                }
 
-            if (! Str::contains($key, '/')) {
-                $key = Str::start($key, $this->namespace());
+                $value = collect($value);
+
+                if (! Str::contains($key, '/')) {
+                    $key = Str::start($key, $this->namespace());
+                }
+
+                 return register_block_type($key, [
+                    'attributes' => $value->get('attributes', []),
+                    'render_callback' => function ($data, $content) use ($key, $value) {
+                        return view($value->get('view', 'blocks.' . Str::after($key, '/')), [
+                            'data' => (object) $data,
+                            'content' => $value->get('strip', true) && $this->isEmpty($content) ? false : $content
+                        ]);
+                    },
+                ]);
             }
-
-            return register_block_type($key, [
-                'attributes' => $config->get('attributes', []),
-                'render_callback' => function ($data, $content) use ($key, $config) {
-                    return view($config->get('view', 'blocks.' . Str::after($key, '/')), [
-                        'data' => (object) $data,
-                        'content' => $config->get('strip', true) && $this->isEmpty($content) ? false : $content
-                    ]);
-                },
-            ]);
         });
     }
 
