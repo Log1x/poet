@@ -56,7 +56,9 @@ class Poet
 
                 return register_extended_post_type(
                     $key,
-                    Arr::get($value, 'links', 'post'),
+                    Arr::wrap(
+                        Arr::get($value, 'links', 'post')
+                    ),
                     Arr::get($value, 'labels', [])
                 );
             }
