@@ -40,6 +40,10 @@ class Poet
      * If a post type already exists, the object will be modified instead.
      *   ↪ https://codex.wordpress.org/Function_Reference/get_post_type_object
      *
+     * If a post type already exists and is set to `false`, the post type
+     * will be unregistered.
+     *  ↪ https://developer.wordpress.org/reference/functions/unregister_post_type/
+     *
      * @return void
      */
     protected function registerPosts()
@@ -51,6 +55,10 @@ class Poet
                 }
 
                 if ($this->exists($key)) {
+                    if (is_bool($value) && $value === false) {
+                        return $this->remove($key);
+                    }
+
                     return $this->modify($key, $value);
                 }
 
@@ -70,6 +78,11 @@ class Poet
      * If a taxonomy already exists, the object will be modified instead.
      *   ↪ https://developer.wordpress.org/reference/functions/get_taxonomy/
      *
+     * If a taxonomy already exists and is set to `false`, the taxonomy
+     * will be unregistered.
+     *   ↪ https://developer.wordpress.org/reference/functions/unregister_taxonomy_for_object_type/
+     *     https://developer.wordpress.org/reference/functions/unregister_taxonomy/
+     *
      * @return void
      */
     protected function registerTaxonomies()
@@ -81,6 +94,10 @@ class Poet
                 }
 
                 if ($this->exists($key)) {
+                    if (is_bool($value) && $value === false) {
+                        return $this->remove($key);
+                    }
+
                     return $this->modify($key, $value);
                 }
 
@@ -174,6 +191,29 @@ class Poet
     }
 
     /**
+     * Removes an existing post type or taxonomy object.
+     *
+     * @param  string $name
+     * @return void
+     */
+    protected function remove($name)
+    {
+        $object = get_post_type_object($name) ?: get_taxonomy($name);
+
+        if (! $this->verify($object)) {
+            return;
+        }
+
+        if ($this->isTaxonomy($object)) {
+            return collect($object->object_type)->each(function ($key) use ($object) {
+                return unregister_taxonomy_for_object_type($object->name, $key) ?? unregister_taxonomy($object);
+            });
+        }
+
+        return unregister_post_type($object);
+    }
+
+    /**
      * Checks if the passed object is a valid WP_Post_Type or WP_Taxonomy instance.
      *
      * @param  object $object
@@ -181,7 +221,7 @@ class Poet
      */
     protected function verify($object)
     {
-        return $object instanceof WP_Post_Type || $object instanceof WP_Taxonomy;
+        return $this->isPostType($object) || $this->isTaxonomy($object);
     }
 
     /**
@@ -195,6 +235,28 @@ class Poet
         return (Str::slug(
             wp_get_theme()->get('TextDomain')
         ) ?? 'sage') . $delimiter;
+    }
+
+    /**
+     * Check if an object is an instance of WP_Post_Type.
+     *
+     * @param  mixed $object
+     * @return bool
+     */
+    protected function isPostType($object)
+    {
+        return $object instanceof WP_Post_Type;
+    }
+
+    /**
+     * Check if an object is an instance of WP_Taxonomy.
+     *
+     * @param  mixed $object
+     * @return bool
+     */
+    protected function isTaxonomy($object)
+    {
+        return $object instanceof WP_Taxonomy;
     }
 
     /**

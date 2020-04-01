@@ -73,6 +73,16 @@ To modify an existing post type, simply treat it as if you are creating a new po
 ],
 ```
 
+It is also possible to unregister an existing post type by simply passing `false`:
+
+```php
+'post' => [
+    'book' => false,
+],
+```
+
+Please note that some built-in post types (e.g. Post) can not be conventionally unregistered.
+
 For additional configuration options for post types, please see:
 
 - [`register_post_type()`](https://developer.wordpress.org/reference/functions/register_post_type/)
@@ -113,6 +123,15 @@ As with post types, to modify an existing taxonomy, simply pass only the configu
             'plural' => 'Sections',
         ],
     ],
+],
+```
+
+Also like post types, you can easily unregister an existing taxonomy by simply passing `false`:
+
+```php
+'taxonomy' => [
+    'post_tag' => false,
+    'category' => false,
 ],
 ```
 
