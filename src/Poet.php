@@ -7,6 +7,8 @@ use WP_Taxonomy;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 
+use function Roots\asset;
+
 class Poet
 {
     /**
@@ -31,6 +33,7 @@ class Poet
             $this->registerTaxonomies();
             $this->registerBlocks();
             $this->registerCategories();
+            $this->registerPalette();
         }, 20);
     }
 
@@ -221,6 +224,57 @@ class Poet
                 ->values()
                 ->all();
         });
+    }
+
+    /**
+     * Register the configured color palette with the editor.
+     *
+     * @link https://developer.wordpress.org/block-editor/developers/themes/theme-support/#block-color-palettes
+     * @return void
+     */
+    protected function registerPalette()
+    {
+        if (
+            (is_bool($palette = $this->config->get('palette')) && $palette === true) ||
+            is_string($palette)
+        ) {
+            $palette = json_decode(
+                asset(Str::finish(is_string($palette) ? $palette : 'palette', '.json'))->contents(),
+                true
+            );
+
+            if (empty($palette)) {
+                return;
+            }
+
+            return add_theme_support('editor-color-palette', $palette);
+        }
+
+        $palette = $this->config
+            ->only('palette')
+            ->collapse()
+            ->map(function ($value, $key) {
+                if (! is_array($value)) {
+                    return [
+                        'name' => Str::title($key),
+                        'slug' => Str::slug($key),
+                        'color' => $value,
+                    ];
+                }
+
+                return array_merge([
+                    'name' => Str::title($key),
+                    'slug' => Str::slug($key),
+                ], $value ?? []);
+            })
+            ->values()
+            ->filter();
+
+        if ($palette->isEmpty()) {
+            return;
+        }
+
+        return add_theme_support('editor-color-palette', $palette->all());
     }
 
     /**

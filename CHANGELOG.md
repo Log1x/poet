@@ -1,3 +1,9 @@
+## v1.0.9 (04/30/20)
+
+- feat(poet): Add editor color palette support
+- chore(readme): Add editor color palette examples to README
+- chore(readme): General clean up
+
 ## v1.0.8 (04/30/20)
 
 - feat(poet): Add block category support
