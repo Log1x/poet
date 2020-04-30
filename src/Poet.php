@@ -165,7 +165,7 @@ class Poet
 
     /**
      * Register the configured block categories with the editor.
-
+     *
      * If a category already exists, it will be modified instead.
      *
      * If a category already exists and is set to `false`, the taxonomy
