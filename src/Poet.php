@@ -30,6 +30,7 @@ class Poet
             $this->registerPosts();
             $this->registerTaxonomies();
             $this->registerBlocks();
+            $this->registerCategories();
         }, 20);
     }
 
@@ -48,9 +49,11 @@ class Poet
      */
     protected function registerPosts()
     {
-        $this->config->only('post')->each(function ($post) {
-            return collect($post)->each(function ($value, $key) {
-                if (empty($key)) {
+        $this->config
+            ->only('post')
+            ->collapse()
+            ->each(function ($value, $key) {
+                if (empty($key) || is_int($key)) {
                     return register_extended_post_type(...Arr::wrap($value));
                 }
 
@@ -68,7 +71,6 @@ class Poet
                     Arr::get($value, 'labels', [])
                 );
             });
-        });
     }
 
     /**
@@ -87,9 +89,11 @@ class Poet
      */
     protected function registerTaxonomies()
     {
-        $this->config->only('taxonomy')->each(function ($taxonomy) {
-            return collect($taxonomy)->each(function ($value, $key) {
-                if (empty($key)) {
+        $this->config
+            ->only('taxonomy')
+            ->collapse()
+            ->each(function ($value, $key) {
+                if (empty($key) || is_int($key)) {
                     return register_extended_taxonomy($value, 'post');
                 }
 
@@ -108,7 +112,6 @@ class Poet
                     Arr::get($value, 'labels', [])
                 );
             });
-        });
     }
 
     /**
@@ -134,9 +137,11 @@ class Poet
      */
     protected function registerBlocks()
     {
-        return $this->config->only('block')->each(function ($block) {
-            foreach ($block as $key => $value) {
-                if (empty($key)) {
+        return $this->config
+            ->only('block')
+            ->collapse()
+            ->each(function ($value, $key) {
+                if (empty($key) || is_int($key)) {
                     $key = $value;
                 }
 
@@ -146,7 +151,7 @@ class Poet
                     $key = Str::start($key, $this->namespace());
                 }
 
-                 return register_block_type($key, [
+                return register_block_type($key, [
                     'attributes' => $value->get('attributes', []),
                     'render_callback' => function ($data, $content) use ($key, $value) {
                         return view($value->get('view', 'blocks.' . Str::after($key, '/')), [
@@ -154,8 +159,67 @@ class Poet
                             'content' => $value->get('strip', true) && $this->isEmpty($content) ? false : $content
                         ]);
                     },
-                 ]);
-            }
+                ]);
+            });
+    }
+
+    /**
+     * Register the configured block categories with the editor.
+
+     * If a category already exists, it will be modified instead.
+     *
+     * If a category already exists and is set to `false`, the taxonomy
+     * will be unregistered.
+     *
+     * @return void
+     */
+    protected function registerCategories()
+    {
+        add_filter('block_categories', function ($categories) {
+            $categories = collect($categories)->keyBy('slug');
+
+            return $this->config
+                ->only('categories')
+                ->collapse()
+                ->map(function ($value, $key) use ($categories) {
+                    if (empty($key) || is_int($key)) {
+                        $key = $value;
+                    }
+
+                    if ($categories->has($key)) {
+                        if (is_bool($value) && $value === false) {
+                            return $categories->forget($key);
+                        }
+
+                        if (is_string($value)) {
+                            $value = ['title' => Str::title($value)];
+                        }
+
+                        return $categories->put(
+                            $key,
+                            array_merge($categories->get($key), $value)
+                        );
+                    }
+
+                    if (! is_array($value)) {
+                        return [
+                            'slug' => Str::slug($key),
+                            'title' => Str::title($value ?? $key),
+                            'icon' => null,
+                        ];
+                    }
+
+                    return array_merge([
+                        'slug' => Str::slug($key),
+                        'title' => Str::title($key),
+                        'icon' => null,
+                    ], $value ?? []);
+                })
+                ->merge($categories->all())
+                ->filter()
+                ->sort()
+                ->values()
+                ->all();
         });
     }
 

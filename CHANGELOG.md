@@ -1,3 +1,12 @@
+## v1.0.7 (04/30/20)
+
+- feat(poet): Add block category support
+- fix(post): Fix post type registration when using multiple string keys.
+- fix(taxonomy): Fix taxonomy registration when using multiple string keys.
+- enhance(poet): Make the post type, taxonomy, and block registration loop more performant.
+- chore(deps): Bump dependencies
+- chore(docs): Add block category examples to README
+
 ## v1.0.6 (03/31/20)
 
 - fix(post): Actually fix post type registration
