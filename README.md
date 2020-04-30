@@ -4,7 +4,7 @@
 ![Build Status](https://img.shields.io/circleci/build/github/Log1x/poet?style=flat-square)
 ![Total Downloads](https://img.shields.io/packagist/dt/log1x/poet?style=flat-square)
 
-Poet provides simple configuration-based post type and taxonomy registration as well as the ability to register Gutenberg blocks to be rendered with Laravel Blade.
+Poet provides simple configuration-based post type, taxonomy, and block category registration as well as the ability to register Gutenberg blocks rendered with Laravel Blade.
 
 Post types and taxonomies are registered utilizing [Extended CPTs](https://github.com/johnbillion/extended-cpts).
 
@@ -141,6 +141,63 @@ For additional configuration options for taxonomies, please see:
 - [`register_extended_taxonomy()`](https://github.com/johnbillion/extended-cpts/wiki/Registering-taxonomies).
 
 > **Note**: Do not nest configuration in a `config` key like shown in the Extended CPTs documentation.
+
+### Register a Block Category
+
+Poet provides an easy to way register, modify, and unregister Gutenberg block categories. Looking in the config, you will see a commented out example for a Call to Action category:
+
+```php
+'categories' => [
+    'cta' => [
+        'title' => 'Call to Action',
+        'icon' => 'star-filled',
+    ],
+],
+```
+
+This would result in a block category with a slug of `cta`. Once your block category is registered, you must register a block to its slug before the category will appear in the editor.
+
+In it's simplest form, you can simply pass a string:
+
+```php
+'categories' => [
+    'my-cool-blocks',
+],
+```
+
+which would result in a `my-cool-blocks` category automatically converting the slug to title case.
+
+You can also specify the title by passing a value to your slug:
+
+```php
+'categories' => [
+    'my-cool-blocks' => 'Best Blocks, World.',
+],
+```
+
+Like post types and taxonomies, modifying an existing block category is the same as registering one:
+
+```php
+'categories' => [
+    'common' => ['icon' => 'star-filled']
+],
+```
+
+You can also easily rename existing categories by passing it a string instead of an array:
+
+```php
+'categories' => [
+    'common' => 'Uncommon Blocks',
+],
+```
+
+You can unregister an existing block category by simply passing `false`:
+
+```php
+'categories' => [
+    'common' => false,
+],
+```
 
 ### Registering a Block
 

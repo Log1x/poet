@@ -66,6 +66,24 @@ return [
     */
 
     'block' => [
-        // 'sage/accordion'
+        // 'sage/accordion',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Block Categories
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify block categories to be registered by Poet for use
+    | in the editor.
+    |
+    */
+
+    'categories' => [
+        // 'cta' => [
+        //     'title' => 'Call to Action',
+        //     'icon' => 'star-filled',
+        // ],
+    ],
+
 ];
