@@ -26,13 +26,15 @@ Install via Composer:
 $ composer require log1x/poet
 ```
 
-## Usage
+## Getting Started
 
 Start with publishing the Poet configuration file using Acorn:
 
 ```bash
 $ wp acorn vendor:publish --provider="Log1x\Poet\PoetServiceProvider"
 ```
+
+## Usage
 
 ### Registering a Post Type
 
@@ -144,7 +146,7 @@ For additional configuration options for taxonomies, please see:
 
 > **Note**: Do not nest configuration in a `config` key like shown in the Extended CPTs documentation.
 
-### Register a Block Category
+### Registering a Block Category
 
 Poet provides an easy to way register, modify, and unregister Gutenberg block categories. Looking in the config, you will see a commented out example for a Call to Action category:
 
