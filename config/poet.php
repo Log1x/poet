@@ -86,4 +86,29 @@ return [
         // ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Editor Palette
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the color palette registered in the Gutenberg
+    | editor.
+    |
+    | A color palette can be passed as an array or by passing the filename of
+    | a JSON file containing the palette.
+    |
+    | If a color is passed a value directly, the slug will automatically be
+    | converted to Title Case and used as the color name.
+    |
+    | If the palette is explicitly set to `true` – Poet will attempt to
+    | register the palette using the default `palette.json` filename generated
+    | by <https://github.com/roots/palette-webpack-plugin>
+    |
+    */
+
+    'palette' => [
+        // 'red' => '#ff0000',
+        // 'blue' => '#0000ff',
+    ],
+
 ];

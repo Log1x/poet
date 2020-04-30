@@ -4,7 +4,7 @@
 ![Build Status](https://img.shields.io/circleci/build/github/Log1x/poet?style=flat-square)
 ![Total Downloads](https://img.shields.io/packagist/dt/log1x/poet?style=flat-square)
 
-Poet provides simple configuration-based post type, taxonomy, block category, and block registration and modification. 
+Poet provides simple configuration-based post type, taxonomy, editor color palette, block category, and block registration/modification.
 
 Blocks registered with Poet are rendered using Laravel Blade on the frontend giving you full control over rendered block markup.
 
@@ -90,7 +90,7 @@ Please note that some built-in post types (e.g. Post) can not be conventionally 
 For additional configuration options for post types, please see:
 
 - [`register_post_type()`](https://developer.wordpress.org/reference/functions/register_post_type/)
-- [`register_extended_post_type()`](https://github.com/johnbillion/extended-cpts/wiki/Registering-Post-Types).
+- [`register_extended_post_type()`](https://github.com/johnbillion/extended-cpts/wiki/Registering-Post-Types)
 
 > **Note**: Do not nest configuration in a `config` key like shown in the Extended CPTs documentation.
 
@@ -145,6 +145,31 @@ For additional configuration options for taxonomies, please see:
 - [`register_extended_taxonomy()`](https://github.com/johnbillion/extended-cpts/wiki/Registering-taxonomies)
 
 > **Note**: Do not nest configuration in a `config` key like shown in the Extended CPTs documentation.
+
+### Registering an Editor Color Palette
+
+Poet attempts to simplify registering a color palette with the editor a bit by not requiring such strict, fragile array markup.
+
+While you can of course pass said array directly, you are also able to register colors by simply passing a slug along with a color and letting Poet handle the rest.
+
+```php
+'palette' => [
+    'red' => '#ff0000',
+    'blue' => '#0000ff',
+],
+```
+
+Alternatively to passing an array, Poet also accepts a `JSON` file containing your color palette. Poet will generally look for this file in `dist/` by default.
+
+```php
+'palette' => 'colors.json',
+```
+
+If you are using the [Palette Webpack Plugin](https://github.com/roots/palette-webpack-plugin), you may also simply pass `true` to automatically use the generated `palette.json` during build.
+
+```php
+'palette' => true,
+```
 
 ### Registering a Block Category
 

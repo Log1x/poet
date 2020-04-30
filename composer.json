@@ -2,7 +2,7 @@
   "name": "log1x/poet",
   "type": "package",
   "license": "MIT",
-  "description": "Configuration-based post types and taxonomies for Sage 10.",
+  "description": "Configuration-based post type, taxonomy, block category, and block registration for Sage 10.",
   "authors": [
     {
       "name": "Brandon Nifong",
@@ -10,7 +10,9 @@
     }
   ],
   "keywords": [
-    "wordpress"
+    "wordpress",
+    "gutenberg",
+    "cpt"
   ],
   "support": {
     "issues": "https://github.com/log1x/poet/issues"
