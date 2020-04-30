@@ -168,7 +168,7 @@ class Poet
      *
      * If a category already exists, it will be modified instead.
      *
-     * If a category already exists and is set to `false`, the taxonomy
+     * If a category already exists and is set to `false`, the category
      * will be unregistered.
      *
      * @return void
