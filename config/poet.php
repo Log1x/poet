@@ -74,8 +74,8 @@ return [
     | Block Categories
     |--------------------------------------------------------------------------
     |
-    | Here you may specify block categories to be registered or unregistered
-    | by Poet for use in the editor.
+    | Here you may specify block categories to be registered by Poet for use
+    | in the editor.
     |
     */
 
