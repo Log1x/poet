@@ -4,7 +4,9 @@
 ![Build Status](https://img.shields.io/circleci/build/github/Log1x/poet?style=flat-square)
 ![Total Downloads](https://img.shields.io/packagist/dt/log1x/poet?style=flat-square)
 
-Poet provides simple configuration-based post type, taxonomy, and block category registration as well as the ability to register Gutenberg blocks rendered with Laravel Blade.
+Poet provides simple configuration-based post type, taxonomy, block category, and block registration and modification. 
+
+Blocks registered with Poet are rendered using Laravel Blade on the frontend giving you full control over rendered block markup.
 
 Post types and taxonomies are registered utilizing [Extended CPTs](https://github.com/johnbillion/extended-cpts).
 
@@ -138,7 +140,7 @@ Also like post types, you can easily unregister an existing taxonomy by simply p
 For additional configuration options for taxonomies, please see:
 
 - [`register_taxonomy()`](https://codex.wordpress.org/Function_Reference/register_taxonomy)
-- [`register_extended_taxonomy()`](https://github.com/johnbillion/extended-cpts/wiki/Registering-taxonomies).
+- [`register_extended_taxonomy()`](https://github.com/johnbillion/extended-cpts/wiki/Registering-taxonomies)
 
 > **Note**: Do not nest configuration in a `config` key like shown in the Extended CPTs documentation.
 
@@ -179,15 +181,8 @@ Like post types and taxonomies, modifying an existing block category is the same
 
 ```php
 'categories' => [
-    'common' => ['icon' => 'star-filled']
-],
-```
-
-You can also easily rename existing categories by passing it a string instead of an array:
-
-```php
-'categories' => [
-    'common' => 'Uncommon Blocks',
+    'layouts' => 'Sections',
+    'common' => ['icon' => 'star-filled'],
 ],
 ```
 
@@ -211,7 +206,7 @@ Registering a block in most cases is as simple as:
 
 ```php
 'block' => [
-    'sage/accordion'
+    'sage/accordion',
 ],
 ```
 
@@ -230,7 +225,7 @@ If you do not want this behavior on a particular block, simply register it as an
 
 ```php
 'block' => [
-    'sage/accordion' => ['strip' => false]
+    'sage/accordion' => ['strip' => false],
 ],
 ```
 
