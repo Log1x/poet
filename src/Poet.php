@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 
 use function Roots\asset;
+use function Roots\view;
 
 class Poet
 {
