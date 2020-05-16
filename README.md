@@ -77,6 +77,14 @@ To modify an existing post type, simply treat it as if you are creating a new po
 ],
 ```
 
+Optionally, Poet can also automatically add anchor `ID` attributes to post headings for configured post types by simply setting `anchor` to `true`:
+
+```php
+'post' => [
+    'post' => ['anchor' => true],
+],
+```
+
 It is also possible to unregister an existing post type by simply passing `false`:
 
 ```php
@@ -146,81 +154,6 @@ For additional configuration options for taxonomies, please see:
 
 > **Note**: Do not nest configuration in a `config` key like shown in the Extended CPTs documentation.
 
-### Registering an Editor Color Palette
-
-Poet attempts to simplify registering a color palette with the editor a bit by not requiring such strict, fragile array markup.
-
-While you can of course pass said array directly, you are also able to register colors by simply passing a slug along with a color and letting Poet handle the rest.
-
-```php
-'palette' => [
-    'red' => '#ff0000',
-    'blue' => '#0000ff',
-],
-```
-
-Alternatively to passing an array, Poet also accepts a `JSON` file containing your color palette. Poet will generally look for this file in `dist/` by default.
-
-```php
-'palette' => 'colors.json',
-```
-
-If you are using the [Palette Webpack Plugin](https://github.com/roots/palette-webpack-plugin), you may also simply pass `true` to automatically use the generated `palette.json` during build.
-
-```php
-'palette' => true,
-```
-
-### Registering a Block Category
-
-Poet provides an easy to way register, modify, and unregister Gutenberg block categories. Looking in the config, you will see a commented out example for a Call to Action category:
-
-```php
-'categories' => [
-    'cta' => [
-        'title' => 'Call to Action',
-        'icon' => 'star-filled',
-    ],
-],
-```
-
-This would result in a block category with a slug of `cta`. Once your block category is registered, you must register a block to its slug before the category will appear in the editor.
-
-In it's simplest form, you can simply pass a string:
-
-```php
-'categories' => [
-    'my-cool-blocks',
-],
-```
-
-which would result in a `my-cool-blocks` category automatically converting the slug to title case.
-
-You can also specify the title by passing a value to your slug:
-
-```php
-'categories' => [
-    'my-cool-blocks' => 'Best Blocks, World.',
-],
-```
-
-Like post types and taxonomies, modifying an existing block category is the same as registering one:
-
-```php
-'categories' => [
-    'layouts' => 'Sections',
-    'common' => ['icon' => 'star-filled'],
-],
-```
-
-You can unregister an existing block category by simply passing `false`:
-
-```php
-'categories' => [
-    'common' => false,
-],
-```
-
 ### Registering a Block
 
 Poet provides an easy way to register a Gutenberg block with the editor using an accompanying Blade view for rendering the block on the frontend.
@@ -283,6 +216,81 @@ Consider an accordion block that is registered with a `title` and `className` at
     {!! $content ?? 'Please feed me InnerBlocks.' !!}
   </div>
 </div>
+```
+
+### Registering a Block Category
+
+Poet provides an easy to way register, modify, and unregister Gutenberg block categories. Looking in the config, you will see a commented out example for a Call to Action category:
+
+```php
+'categories' => [
+    'cta' => [
+        'title' => 'Call to Action',
+        'icon' => 'star-filled',
+    ],
+],
+```
+
+This would result in a block category with a slug of `cta`. Once your block category is registered, you must register a block to its slug before the category will appear in the editor.
+
+In it's simplest form, you can simply pass a string:
+
+```php
+'categories' => [
+    'my-cool-blocks',
+],
+```
+
+which would result in a `my-cool-blocks` category automatically converting the slug to title case.
+
+You can also specify the title by passing a value to your slug:
+
+```php
+'categories' => [
+    'my-cool-blocks' => 'Best Blocks, World.',
+],
+```
+
+Like post types and taxonomies, modifying an existing block category is the same as registering one:
+
+```php
+'categories' => [
+    'layouts' => 'Sections',
+    'common' => ['icon' => 'star-filled'],
+],
+```
+
+You can unregister an existing block category by simply passing `false`:
+
+```php
+'categories' => [
+    'common' => false,
+],
+```
+
+### Registering an Editor Color Palette
+
+Poet attempts to simplify registering a color palette with the editor a bit by not requiring such strict, fragile array markup.
+
+While you can of course pass said array directly, you are also able to register colors by simply passing a slug along with a color and letting Poet handle the rest.
+
+```php
+'palette' => [
+    'red' => '#ff0000',
+    'blue' => '#0000ff',
+],
+```
+
+Alternatively to passing an array, Poet also accepts a `JSON` file containing your color palette. Poet will generally look for this file in `dist/` by default.
+
+```php
+'palette' => 'colors.json',
+```
+
+If you are using the [Palette Webpack Plugin](https://github.com/roots/palette-webpack-plugin), you may also simply pass `true` to automatically use the generated `palette.json` during build.
+
+```php
+'palette' => true,
 ```
 
 ## Bug Reports
