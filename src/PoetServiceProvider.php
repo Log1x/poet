@@ -27,7 +27,7 @@ class PoetServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../config/poet.php' => $this->app->configPath('poet.php'),
-        ]);
+        ], 'config');
 
         $this->app->make('Log1x\Poet');
     }

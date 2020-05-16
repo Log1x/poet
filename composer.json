@@ -34,7 +34,10 @@
     "acorn": {
       "providers": [
         "Log1x\\Poet\\PoetServiceProvider"
-      ]
+      ],
+      "aliases": {
+        "Poet": "Log1x\\Poet\\Facades\\Poet"
+      }
     }
   },
   "scripts": {

@@ -5,6 +5,7 @@ namespace Log1x\Poet;
 use WP_Post_Type;
 use WP_Taxonomy;
 use TOC\MarkupFixer;
+use TOC\TocGenerator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 
@@ -319,20 +320,21 @@ class Poet
     }
 
     /**
-     * Build a table of contents for the current post using
-     * existing content headings.
+     * Build a collection containing the table of contents for
+     * the current post using existing content headings.
      *
+     * @param  int|array $depth
      * @param  int|string|WP_Post $post
      * @return void
      */
-    protected function renderToc()
+    public function toc($depth = 3)
     {
         return collect(
-            (new \TOC\TocGenerator())
+            (new TocGenerator())
                 ->getMenu(
-                    $this->content(),
-                    min(2, $this->depth()),
-                    $this->depth()
+                    get_the_content(),
+                    min(2, $depth),
+                    $depth
                 )->getChildren()
         )->filter(function ($item) {
             return ! empty($item->getName());
