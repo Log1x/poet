@@ -1,3 +1,7 @@
+## v1.1.0 (05/15/20)
+
+- feat(post): Add support for automatically adding heading anchor ID attributes to post types.
+
 ## v1.0.9 (04/30/20)
 
 - feat(poet): Add editor color palette support

@@ -4,6 +4,7 @@ namespace Log1x\Poet;
 
 use WP_Post_Type;
 use WP_Taxonomy;
+use TOC\MarkupFixer;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 
@@ -31,6 +32,7 @@ class Poet
 
         add_filter('init', function () {
             $this->registerPosts();
+            $this->registerPostAnchors();
             $this->registerTaxonomies();
             $this->registerBlocks();
             $this->registerCategories();
@@ -47,7 +49,7 @@ class Poet
      *
      * If a post type already exists and is set to `false`, the post type
      * will be unregistered.
-     *  ↪ https://developer.wordpress.org/reference/functions/unregister_post_type/
+     *   ↪ https://developer.wordpress.org/reference/functions/unregister_post_type/
      *
      * @return void
      */
@@ -75,6 +77,44 @@ class Poet
                     Arr::get($value, 'labels', [])
                 );
             });
+    }
+
+    /**
+     * Add anchor ID attributes to post content heading selectors
+     * when enabled on created or modified post types.
+     *
+     * This is done by simply passing `true` to `anchor` when
+     * registering or modifying post types with Poet.
+     *
+     * If a heading already has a valid anchor ID present in the
+     * form of a slug, it will be skipped.
+     *
+     * You may also optionally pass an array to `anchor` setting
+     * a heading limit range. In this case, passing `4` would only
+     * add anchor ID's to tags h1–h4.
+     *   ↪ https://github.com/caseyamcl/toc
+     *
+     * @return void
+     */
+    protected function registerPostAnchors()
+    {
+        add_filter('the_post', function () {
+            $this->config
+                ->only('post')
+                ->collapse()
+                ->each(function ($value, $key) {
+                    if (
+                        ! Arr::get($value, 'anchor') ||
+                        ! (Str::is($key, get_post_type()) && is_singular())
+                    ) {
+                        return;
+                    }
+
+                    return add_filter('the_content', function ($content) use ($value) {
+                        return (new MarkupFixer())->fix($content, ...Arr::get($value, 'anchor'));
+                    });
+                });
+        }, 20);
     }
 
     /**
@@ -276,6 +316,27 @@ class Poet
         }
 
         return add_theme_support('editor-color-palette', $palette->all());
+    }
+
+    /**
+     * Build a table of contents for the current post using
+     * existing content headings.
+     *
+     * @param  int|string|WP_Post $post
+     * @return void
+     */
+    protected function renderToc()
+    {
+        return collect(
+            (new \TOC\TocGenerator())
+                ->getMenu(
+                    $this->content(),
+                    min(2, $this->depth()),
+                    $this->depth()
+                )->getChildren()
+        )->filter(function ($item) {
+            return ! empty($item->getName());
+        });
     }
 
     /**

@@ -24,7 +24,8 @@
   },
   "require": {
     "php": ">=7.2.5",
-    "johnbillion/extended-cpts": "^4.3"
+    "johnbillion/extended-cpts": "^4.3",
+    "caseyamcl/toc": "^2.2"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.5"
