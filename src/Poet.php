@@ -369,7 +369,7 @@ class Poet
             }
 
             $GLOBALS['menu'] = collect($GLOBALS['menu'])->map(function ($item) use ($menu) {
-                if (! $menu->contains($item[2])) {
+                if (! $menu->contains(Str::afterLast($item[2], '='))) {
                     return $item;
                 }
 
@@ -379,7 +379,9 @@ class Poet
 
                 array_push($GLOBALS['submenu']['tools.php'], [
                     ...array_slice($item, 0, 2),
-                    admin_url("admin.php?page={$item[2]}")
+                    admin_url(
+                        Str::contains($item[2], '.php') ? $item[2] : Str::start($item[2], 'admin.php?page=')
+                    )
                 ]);
             })->filter()->all();
         }, 100);
