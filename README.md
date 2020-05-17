@@ -274,7 +274,7 @@ Poet provides an easy to way register and unregister user roles. Looking in the 
 
 ```php
 'roles' => [
-    ['janitor' => ['delete_posts', 'delete_pages']],
+    'janitor' => ['delete_posts', 'delete_pages'],
 ],
 ```
 

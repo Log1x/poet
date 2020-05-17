@@ -271,7 +271,7 @@ class Poet
     }
 
     /**
-     * Register the configured user roles and capaibilities.
+     * Register the configured user roles and capabilities.
      *
      * If a user role role is explicitly set to `false`, it will be
      * removed instead.
@@ -280,21 +280,24 @@ class Poet
      */
     protected function registerRoles()
     {
-        return $this->config
-            ->only('roles')
-            ->collapse()
-            ->each(function ($key, $value) {
-                if (empty($key) || is_int($key)) {
-                    return;
-                }
+        add_filter('init', function () {
+            return $this->config
+                ->only('roles')
+                ->collapse()
+                ->each(function ($value, $key) {
+                    if (empty($key) || is_int($key)) {
+                        return;
+                    }
 
-                return ! (is_bool($value) && $value === false) ?
-                    add_role(
-                        Str::slug($key),
-                        Str::title($key),
-                        Arr::wrap($value)
-                    ) : remove_role($key);
-            });
+                    return ! ($value === false && Arr::has(wp_roles()->roles, $key)) ?
+                        add_role(
+                            Str::slug($key),
+                            Str::title($key),
+                            Arr::wrap($value)
+                        ) : remove_role($key);
+                });
+        }, 20);
+
     }
 
     /**
