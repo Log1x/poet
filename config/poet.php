@@ -88,6 +88,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | User Roles
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify user roles to be registered by Poet when booting
+    | WordPress.
+    |
+    | Alternatively, you may also explicitly pass `false` to any existing
+    | user roles to unregister them instead.
+    |
+    */
+
+    'roles' => [
+        // ['janitor' => ['delete_posts', 'delete_pages']],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Editor Palette
     |--------------------------------------------------------------------------
     |
@@ -109,6 +126,23 @@ return [
     'palette' => [
         // 'red' => '#ff0000',
         // 'blue' => '#0000ff',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Menu
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify admin menu item page slugs you would like moved to
+    | the Tools menu in an attempt to clean up unwanted core/plugin bloat.
+    |
+    | Alternatively, you may also explicitly pass `false` to any menu item to
+    | remove it entirely.
+    |
+    */
+
+    'menu' => [
+        // 'gutenberg',
     ],
 
 ];

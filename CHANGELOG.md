@@ -1,11 +1,17 @@
-## v1.1.0 (05/15/20)
+## v1.1.1 (05/15/20)
 
 - feat(post): Add support for automatically adding heading anchor ID attributes to post types.
+- feat(users): Add support for adding/removing user roles
+- wip(adminmenu): Add support for cleaning up admin menu items
 - feat(toc): Add a usable table of contents collection for use with `anchors` (or whatever else you have adding anchor attributes)
 - enhance(poet): Add a Facade for calling the table of contents
 - chore(package): Set package discovery/publish category to `config`
 - chore(docs): Re-prioritize sections
 - chore(docs): Add `anchors` mention to docs
+
+## V1.1.0 (05/04/20)
+
+- fix(poet): Add missing view function namespace
 
 ## v1.0.9 (04/30/20)
 

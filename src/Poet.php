@@ -37,7 +37,9 @@ class Poet
             $this->registerTaxonomies();
             $this->registerBlocks();
             $this->registerCategories();
+            $this->registerRoles();
             $this->registerPalette();
+            $this->registerMenu();
         }, 20);
     }
 
@@ -65,7 +67,7 @@ class Poet
                 }
 
                 if ($this->exists($key)) {
-                    if (is_bool($value) && $value === false) {
+                    if ($value === false) {
                         return $this->remove($key);
                     }
 
@@ -143,7 +145,7 @@ class Poet
                 }
 
                 if ($this->exists($key)) {
-                    if (is_bool($value) && $value === false) {
+                    if ($value === false) {
                         return $this->remove($key);
                     }
 
@@ -232,7 +234,7 @@ class Poet
                     }
 
                     if ($categories->has($key)) {
-                        if (is_bool($value) && $value === false) {
+                        if ($value === false) {
                             return $categories->forget($key);
                         }
 
@@ -266,6 +268,33 @@ class Poet
                 ->values()
                 ->all();
         });
+    }
+
+    /**
+     * Register the configured user roles and capaibilities.
+     *
+     * If a user role role is explicitly set to `false`, it will be
+     * removed instead.
+     *
+     * @return void
+     */
+    protected function registerRoles()
+    {
+        return $this->config
+            ->only('roles')
+            ->collapse()
+            ->each(function ($key, $value) {
+                if (empty($key) || is_int($key)) {
+                    return;
+                }
+
+                return ! (is_bool($value) && $value === false) ?
+                    add_role(
+                        Str::slug($key),
+                        Str::title($key),
+                        Arr::wrap($value)
+                    ) : remove_role($key);
+            });
     }
 
     /**
@@ -317,6 +346,43 @@ class Poet
         }
 
         return add_theme_support('editor-color-palette', $palette->all());
+    }
+
+    /**
+     * Moves configured admin menu parent items into the Tools.php submenu.
+     * Items are configured by simply passing the `page` slug of each plugin.
+     *
+     * If an item is explicitly set to `false`, the menu item will be
+     * removed entirely instead.
+     *
+     * @return void
+     */
+    protected function registerMenu()
+    {
+        add_filter('admin_menu', function () {
+            $menu = $this->config
+                ->only('menu')
+                ->collapse();
+
+            if ($menu->isEmpty()) {
+                return;
+            }
+
+            $GLOBALS['menu'] = collect($GLOBALS['menu'])->map(function ($item) use ($menu) {
+                if (! $menu->contains($item[2])) {
+                    return $item;
+                }
+
+                if ($menu->get($item[2]) === false) {
+                    return;
+                }
+
+                array_push($GLOBALS['submenu']['tools.php'], [
+                    ...array_slice($item, 0, 2),
+                    admin_url("admin.php?page={$item[2]}")
+                ]);
+            })->filter()->all();
+        }, 100);
     }
 
     /**
