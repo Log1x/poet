@@ -377,12 +377,14 @@ class Poet
                     return;
                 }
 
-                array_push($GLOBALS['submenu']['tools.php'], [
-                    ...array_slice($item, 0, 2),
-                    admin_url(
-                        Str::contains($item[2], '.php') ? $item[2] : Str::start($item[2], 'admin.php?page=')
-                    )
-                ]);
+                array_push(
+                    $GLOBALS['submenu']['tools.php'],
+                    collect($item)->slice(0, 2)->push(admin_url(
+                        Str::contains($item[2], '.php') ?
+                            $item[2] :
+                            Str::start($item[2], 'admin.php?page=')
+                    ))->all()
+                );
             })->filter()->all();
         }, 100);
     }
