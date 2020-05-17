@@ -297,7 +297,6 @@ class Poet
                         ) : remove_role($key);
                 });
         }, 20);
-
     }
 
     /**
