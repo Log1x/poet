@@ -5,9 +5,9 @@ namespace Log1x\Poet;
 use WP_Post_Type;
 use WP_Taxonomy;
 use TOC\MarkupFixer;
-use TOC\TocGenerator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 use function Roots\asset;
 use function Roots\view;
@@ -29,15 +29,14 @@ class Poet
      */
     public function __construct($config = [])
     {
-        $this->config = collect($config);
+        $this->config = collect($config)->mapInto(Collection::class);
 
         add_filter('init', function () {
             $this->registerPosts();
-            $this->registerPostAnchors();
+            $this->registerAnchors();
             $this->registerTaxonomies();
             $this->registerBlocks();
             $this->registerCategories();
-            $this->registerRoles();
             $this->registerPalette();
             $this->registerMenu();
         }, 20);
@@ -99,7 +98,7 @@ class Poet
      *
      * @return void
      */
-    protected function registerPostAnchors()
+    protected function registerAnchors()
     {
         add_filter('the_post', function () {
             $this->config
@@ -136,29 +135,26 @@ class Poet
      */
     protected function registerTaxonomies()
     {
-        $this->config
-            ->only('taxonomy')
-            ->collapse()
-            ->each(function ($value, $key) {
-                if (empty($key) || is_int($key)) {
-                    return register_extended_taxonomy($value, 'post');
+        $this->config->get('taxonomy')->each(function ($value, $key) {
+            if (empty($key) || is_int($key)) {
+                return register_extended_taxonomy($value, 'post');
+            }
+
+            if ($this->exists($key)) {
+                if ($value === false) {
+                    return $this->remove($key);
                 }
 
-                if ($this->exists($key)) {
-                    if ($value === false) {
-                        return $this->remove($key);
-                    }
+                return $this->modify($key, $value);
+            }
 
-                    return $this->modify($key, $value);
-                }
-
-                return register_extended_taxonomy(
-                    $key,
-                    Arr::get($value, 'links', 'post'),
-                    $value,
-                    Arr::get($value, 'labels', [])
-                );
-            });
+            return register_extended_taxonomy(
+                $key,
+                Arr::get($value, 'links', 'post'),
+                $value,
+                Arr::get($value, 'labels', [])
+            );
+        });
     }
 
     /**
@@ -184,30 +180,27 @@ class Poet
      */
     protected function registerBlocks()
     {
-        return $this->config
-            ->only('block')
-            ->collapse()
-            ->each(function ($value, $key) {
-                if (empty($key) || is_int($key)) {
-                    $key = $value;
-                }
+        return $this->config->get('block')->each(function ($value, $key) {
+            if (empty($key) || is_int($key)) {
+                $key = $value;
+            }
 
-                $value = collect($value);
+            $value = collect($value);
 
-                if (! Str::contains($key, '/')) {
-                    $key = Str::start($key, $this->namespace());
-                }
+            if (! Str::contains($key, '/')) {
+                $key = Str::start($key, $this->namespace());
+            }
 
-                return register_block_type($key, [
-                    'attributes' => $value->get('attributes', []),
-                    'render_callback' => function ($data, $content) use ($key, $value) {
-                        return view($value->get('view', 'blocks.' . Str::after($key, '/')), [
-                            'data' => (object) $data,
-                            'content' => $value->get('strip', true) && $this->isEmpty($content) ? false : $content
-                        ]);
-                    },
-                ]);
-            });
+            return register_block_type($key, [
+                'attributes' => $value->get('attributes', []),
+                'render_callback' => function ($data, $content) use ($key, $value) {
+                    return view($value->get('view', 'blocks.' . Str::after($key, '/')), [
+                        'data' => (object) $data,
+                        'content' => $value->get('strip', true) && $this->isEmpty($content) ? false : $content
+                    ]);
+                },
+            ]);
+        });
     }
 
     /**
@@ -225,78 +218,46 @@ class Poet
         add_filter('block_categories', function ($categories) {
             $categories = collect($categories)->keyBy('slug');
 
-            return $this->config
-                ->only('categories')
-                ->collapse()
-                ->map(function ($value, $key) use ($categories) {
-                    if (empty($key) || is_int($key)) {
-                        $key = $value;
+            return $this->config->get('categories')->map(function ($value, $key) use ($categories) {
+                if (empty($key) || is_int($key)) {
+                    $key = $value;
+                }
+
+                if ($categories->has($key)) {
+                    if ($value === false) {
+                        return $categories->forget($key);
                     }
 
-                    if ($categories->has($key)) {
-                        if ($value === false) {
-                            return $categories->forget($key);
-                        }
-
-                        if (is_string($value)) {
-                            $value = ['title' => Str::title($value)];
-                        }
-
-                        return $categories->put(
-                            $key,
-                            array_merge($categories->get($key), $value)
-                        );
+                    if (is_string($value)) {
+                        $value = ['title' => Str::title($value)];
                     }
 
-                    if (! is_array($value)) {
-                        return [
-                            'slug' => Str::slug($key),
-                            'title' => Str::title($value ?? $key),
-                            'icon' => null,
-                        ];
-                    }
+                    return $categories->put(
+                        $key,
+                        array_merge($categories->get($key), $value)
+                    );
+                }
 
-                    return array_merge([
+                if (! is_array($value)) {
+                    return [
                         'slug' => Str::slug($key),
-                        'title' => Str::title($key),
+                        'title' => Str::title($value ?? $key),
                         'icon' => null,
-                    ], $value ?? []);
-                })
-                ->merge($categories->all())
-                ->filter()
-                ->sort()
-                ->values()
-                ->all();
+                    ];
+                }
+
+                return array_merge([
+                    'slug' => Str::slug($key),
+                    'title' => Str::title($key),
+                    'icon' => null,
+                ], $value ?? []);
+            })
+            ->merge($categories->all())
+            ->filter()
+            ->sort()
+            ->values()
+            ->all();
         });
-    }
-
-    /**
-     * Register the configured user roles and capabilities.
-     *
-     * If a user role role is explicitly set to `false`, it will be
-     * removed instead.
-     *
-     * @return void
-     */
-    protected function registerRoles()
-    {
-        add_filter('init', function () {
-            return $this->config
-                ->only('roles')
-                ->collapse()
-                ->each(function ($value, $key) {
-                    if (empty($key) || is_int($key)) {
-                        return;
-                    }
-
-                    return ! ($value === false && Arr::has(wp_roles()->roles, $key)) ?
-                        add_role(
-                            Str::slug($key),
-                            Str::title($key),
-                            Arr::wrap($value)
-                        ) : remove_role($key);
-                });
-        }, 20);
     }
 
     /**
@@ -323,25 +284,22 @@ class Poet
             return add_theme_support('editor-color-palette', $palette);
         }
 
-        $palette = $this->config
-            ->only('palette')
-            ->collapse()
-            ->map(function ($value, $key) {
-                if (! is_array($value)) {
-                    return [
-                        'name' => Str::title($key),
-                        'slug' => Str::slug($key),
-                        'color' => $value,
-                    ];
-                }
-
-                return array_merge([
+        $palette = $this->config->get('palette')->map(function ($value, $key) {
+            if (! is_array($value)) {
+                return [
                     'name' => Str::title($key),
                     'slug' => Str::slug($key),
-                ], $value ?? []);
-            })
-            ->values()
-            ->filter();
+                    'color' => $value,
+                ];
+            }
+
+            return array_merge([
+                'name' => Str::title($key),
+                'slug' => Str::slug($key),
+            ], $value ?? []);
+        })
+        ->values()
+        ->filter();
 
         if ($palette->isEmpty()) {
             return;
@@ -362,9 +320,7 @@ class Poet
     protected function registerMenu()
     {
         add_filter('admin_menu', function () {
-            $menu = $this->config
-                ->only('menu')
-                ->collapse();
+            $menu = $this->config->get('menu');
 
             if ($menu->isEmpty()) {
                 return;
@@ -381,36 +337,15 @@ class Poet
 
                 array_push(
                     $GLOBALS['submenu']['tools.php'],
-                    collect($item)->slice(0, 2)->push(admin_url(
-                        Str::contains($item[2], '.php') ?
-                            $item[2] :
-                            Str::start($item[2], 'admin.php?page=')
-                    ))->all()
+                    collect($item)->slice(0, 2)->push(
+                        admin_url(
+                            is_string($menu->get($item[2])) ? $item[2] :
+                            Str::contains($item[2], '.php') ? $item[2] : Str::start($item[2], 'admin.php?page=')
+                        )
+                    )->all()
                 );
             })->filter()->all();
         }, 20);
-    }
-
-    /**
-     * Build a collection containing the table of contents for
-     * the current post using existing content headings.
-     *
-     * @param  int|array $depth
-     * @param  int|string|WP_Post $post
-     * @return void
-     */
-    public function toc($depth = 3)
-    {
-        return collect(
-            (new TocGenerator())
-                ->getMenu(
-                    get_the_content(),
-                    min(2, $depth),
-                    $depth
-                )->getChildren()
-        )->filter(function ($item) {
-            return ! empty($item->getName());
-        });
     }
 
     /**

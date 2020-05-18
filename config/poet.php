@@ -88,23 +88,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | User Roles
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify user roles to be registered by Poet when booting
-    | WordPress.
-    |
-    | Alternatively, you may also explicitly pass `false` to any existing
-    | user roles to unregister them instead.
-    |
-    */
-
-    'roles' => [
-        // ['janitor' => ['delete_posts', 'delete_pages']],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Editor Palette
     |--------------------------------------------------------------------------
     |
