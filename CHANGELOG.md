@@ -1,3 +1,17 @@
+## v1.1.1 (05/15/20)
+
+- feat(post): Add support for automatically adding heading anchor ID attributes to post types.
+- enhance(config): Handle config collections more efficiently
+- wip(adminmenu): Add support for cleaning up admin menu items
+- chore(package): Set package discovery/publish category to `config`
+- chore(docs): Re-prioritize sections
+- chore(docs): Add `anchors` mention to docs
+- chore(docs): Add admin menu mention to docs
+
+## V1.1.0 (05/04/20)
+
+- fix(poet): Add missing view function namespace
+
 ## v1.0.9 (04/30/20)
 
 - feat(poet): Add editor color palette support

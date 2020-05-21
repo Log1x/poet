@@ -111,4 +111,21 @@ return [
         // 'blue' => '#0000ff',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Menu
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify admin menu item page slugs you would like moved to
+    | the Tools menu in an attempt to clean up unwanted core/plugin bloat.
+    |
+    | Alternatively, you may also explicitly pass `false` to any menu item to
+    | remove it entirely.
+    |
+    */
+
+    'menu' => [
+        // 'gutenberg',
+    ],
+
 ];

@@ -4,8 +4,10 @@ namespace Log1x\Poet;
 
 use WP_Post_Type;
 use WP_Taxonomy;
+use TOC\MarkupFixer;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 use function Roots\asset;
 use function Roots\view;
@@ -27,14 +29,16 @@ class Poet
      */
     public function __construct($config = [])
     {
-        $this->config = collect($config);
+        $this->config = collect($config)->mapInto(Collection::class);
 
         add_filter('init', function () {
             $this->registerPosts();
+            $this->registerAnchors();
             $this->registerTaxonomies();
             $this->registerBlocks();
             $this->registerCategories();
             $this->registerPalette();
+            $this->registerMenu();
         }, 20);
     }
 
@@ -47,7 +51,7 @@ class Poet
      *
      * If a post type already exists and is set to `false`, the post type
      * will be unregistered.
-     *  ↪ https://developer.wordpress.org/reference/functions/unregister_post_type/
+     *   ↪ https://developer.wordpress.org/reference/functions/unregister_post_type/
      *
      * @return void
      */
@@ -62,7 +66,7 @@ class Poet
                 }
 
                 if ($this->exists($key)) {
-                    if (is_bool($value) && $value === false) {
+                    if ($value === false) {
                         return $this->remove($key);
                     }
 
@@ -75,6 +79,44 @@ class Poet
                     Arr::get($value, 'labels', [])
                 );
             });
+    }
+
+    /**
+     * Add anchor ID attributes to post content heading selectors
+     * when enabled on created or modified post types.
+     *
+     * This is done by simply passing `true` to `anchors` when
+     * registering or modifying post types with Poet.
+     *
+     * If a heading already has a valid anchor ID present in the
+     * form of a slug, it will be skipped.
+     *
+     * You may also optionally pass an array to `anchors` setting
+     * a heading limit range. In this case, passing `4` would only
+     * add anchor ID's to tags h1–h4.
+     *   ↪ https://github.com/caseyamcl/toc
+     *
+     * @return void
+     */
+    protected function registerAnchors()
+    {
+        add_filter('the_post', function () {
+            $this->config
+                ->only('post')
+                ->collapse()
+                ->each(function ($value, $key) {
+                    if (
+                        ! Arr::get($value, 'anchors') ||
+                        ! (Str::is($key, get_post_type()) && is_singular())
+                    ) {
+                        return;
+                    }
+
+                    return add_filter('the_content', function ($content) use ($value) {
+                        return (new MarkupFixer())->fix($content, ...Arr::get($value, 'anchors'));
+                    });
+                });
+        }, 20);
     }
 
     /**
@@ -93,29 +135,26 @@ class Poet
      */
     protected function registerTaxonomies()
     {
-        $this->config
-            ->only('taxonomy')
-            ->collapse()
-            ->each(function ($value, $key) {
-                if (empty($key) || is_int($key)) {
-                    return register_extended_taxonomy($value, 'post');
+        $this->config->get('taxonomy')->each(function ($value, $key) {
+            if (empty($key) || is_int($key)) {
+                return register_extended_taxonomy($value, 'post');
+            }
+
+            if ($this->exists($key)) {
+                if ($value === false) {
+                    return $this->remove($key);
                 }
 
-                if ($this->exists($key)) {
-                    if (is_bool($value) && $value === false) {
-                        return $this->remove($key);
-                    }
+                return $this->modify($key, $value);
+            }
 
-                    return $this->modify($key, $value);
-                }
-
-                return register_extended_taxonomy(
-                    $key,
-                    Arr::get($value, 'links', 'post'),
-                    $value,
-                    Arr::get($value, 'labels', [])
-                );
-            });
+            return register_extended_taxonomy(
+                $key,
+                Arr::get($value, 'links', 'post'),
+                $value,
+                Arr::get($value, 'labels', [])
+            );
+        });
     }
 
     /**
@@ -141,30 +180,27 @@ class Poet
      */
     protected function registerBlocks()
     {
-        return $this->config
-            ->only('block')
-            ->collapse()
-            ->each(function ($value, $key) {
-                if (empty($key) || is_int($key)) {
-                    $key = $value;
-                }
+        return $this->config->get('block')->each(function ($value, $key) {
+            if (empty($key) || is_int($key)) {
+                $key = $value;
+            }
 
-                $value = collect($value);
+            $value = collect($value);
 
-                if (! Str::contains($key, '/')) {
-                    $key = Str::start($key, $this->namespace());
-                }
+            if (! Str::contains($key, '/')) {
+                $key = Str::start($key, $this->namespace());
+            }
 
-                return register_block_type($key, [
-                    'attributes' => $value->get('attributes', []),
-                    'render_callback' => function ($data, $content) use ($key, $value) {
-                        return view($value->get('view', 'blocks.' . Str::after($key, '/')), [
-                            'data' => (object) $data,
-                            'content' => $value->get('strip', true) && $this->isEmpty($content) ? false : $content
-                        ]);
-                    },
-                ]);
-            });
+            return register_block_type($key, [
+                'attributes' => $value->get('attributes', []),
+                'render_callback' => function ($data, $content) use ($key, $value) {
+                    return view($value->get('view', 'blocks.' . Str::after($key, '/')), [
+                        'data' => (object) $data,
+                        'content' => $value->get('strip', true) && $this->isEmpty($content) ? false : $content
+                    ]);
+                },
+            ]);
+        });
     }
 
     /**
@@ -182,48 +218,45 @@ class Poet
         add_filter('block_categories', function ($categories) {
             $categories = collect($categories)->keyBy('slug');
 
-            return $this->config
-                ->only('categories')
-                ->collapse()
-                ->map(function ($value, $key) use ($categories) {
-                    if (empty($key) || is_int($key)) {
-                        $key = $value;
+            return $this->config->get('categories')->map(function ($value, $key) use ($categories) {
+                if (empty($key) || is_int($key)) {
+                    $key = $value;
+                }
+
+                if ($categories->has($key)) {
+                    if ($value === false) {
+                        return $categories->forget($key);
                     }
 
-                    if ($categories->has($key)) {
-                        if (is_bool($value) && $value === false) {
-                            return $categories->forget($key);
-                        }
-
-                        if (is_string($value)) {
-                            $value = ['title' => Str::title($value)];
-                        }
-
-                        return $categories->put(
-                            $key,
-                            array_merge($categories->get($key), $value)
-                        );
+                    if (is_string($value)) {
+                        $value = ['title' => Str::title($value)];
                     }
 
-                    if (! is_array($value)) {
-                        return [
-                            'slug' => Str::slug($key),
-                            'title' => Str::title($value ?? $key),
-                            'icon' => null,
-                        ];
-                    }
+                    return $categories->put(
+                        $key,
+                        array_merge($categories->get($key), $value)
+                    );
+                }
 
-                    return array_merge([
+                if (! is_array($value)) {
+                    return [
                         'slug' => Str::slug($key),
-                        'title' => Str::title($key),
+                        'title' => Str::title($value ?? $key),
                         'icon' => null,
-                    ], $value ?? []);
-                })
-                ->merge($categories->all())
-                ->filter()
-                ->sort()
-                ->values()
-                ->all();
+                    ];
+                }
+
+                return array_merge([
+                    'slug' => Str::slug($key),
+                    'title' => Str::title($key),
+                    'icon' => null,
+                ], $value ?? []);
+            })
+            ->merge($categories->all())
+            ->filter()
+            ->sort()
+            ->values()
+            ->all();
         });
     }
 
@@ -251,31 +284,68 @@ class Poet
             return add_theme_support('editor-color-palette', $palette);
         }
 
-        $palette = $this->config
-            ->only('palette')
-            ->collapse()
-            ->map(function ($value, $key) {
-                if (! is_array($value)) {
-                    return [
-                        'name' => Str::title($key),
-                        'slug' => Str::slug($key),
-                        'color' => $value,
-                    ];
-                }
-
-                return array_merge([
+        $palette = $this->config->get('palette')->map(function ($value, $key) {
+            if (! is_array($value)) {
+                return [
                     'name' => Str::title($key),
                     'slug' => Str::slug($key),
-                ], $value ?? []);
-            })
-            ->values()
-            ->filter();
+                    'color' => $value,
+                ];
+            }
+
+            return array_merge([
+                'name' => Str::title($key),
+                'slug' => Str::slug($key),
+            ], $value ?? []);
+        })
+        ->values()
+        ->filter();
 
         if ($palette->isEmpty()) {
             return;
         }
 
         return add_theme_support('editor-color-palette', $palette->all());
+    }
+
+    /**
+     * Moves configured admin menu parent items into the Tools.php submenu.
+     * Items are configured by simply passing the `page` slug of each plugin.
+     *
+     * If an item is explicitly set to `false`, the menu item will be
+     * removed entirely instead.
+     *
+     * @return void
+     */
+    protected function registerMenu()
+    {
+        add_filter('admin_menu', function () {
+            $menu = $this->config->get('menu');
+
+            if ($menu->isEmpty()) {
+                return;
+            }
+
+            $GLOBALS['menu'] = collect($GLOBALS['menu'])->map(function ($item) use ($menu) {
+                if (! $menu->contains(Str::afterLast($item[2], '='))) {
+                    return $item;
+                }
+
+                if ($menu->get($item[2]) === false) {
+                    return;
+                }
+
+                array_push(
+                    $GLOBALS['submenu']['tools.php'],
+                    collect($item)->slice(0, 2)->push(
+                        admin_url(
+                            is_string($menu->get($item[2])) ? $item[2] :
+                            Str::contains($item[2], '.php') ? $item[2] : Str::start($item[2], 'admin.php?page=')
+                        )
+                    )->all()
+                );
+            })->filter()->all();
+        }, 20);
     }
 
     /**
