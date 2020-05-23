@@ -32,13 +32,13 @@ class Poet
         $this->config = collect($config)->mapInto(Collection::class);
 
         add_filter('init', function () {
-            $this->registerPosts();
-            $this->registerAnchors();
-            $this->registerTaxonomies();
-            $this->registerBlocks();
-            $this->registerCategories();
-            $this->registerPalette();
-            $this->registerMenu();
+            $this->config->has('post') && $this->registerPosts();
+            $this->config->has('post') && $this->registerAnchors();
+            $this->config->has('taxonomy') && $this->registerTaxonomies();
+            $this->config->has('block') && $this->registerBlocks();
+            $this->config->has('categories') && $this->registerCategories();
+            $this->config->has('palette') && $this->registerPalette();
+            $this->config->has('menu') && $this->registerMenu();
         }, 20);
     }
 
