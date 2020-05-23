@@ -1,3 +1,8 @@
+## v1.1.2 (05/22/20)
+
+- fix(config): Allow for undefined configuration keys.
+- fix(poet): Fix deprecated unparenthesized ternaries (PHP 7.4)
+
 ## v1.1.1 (05/15/20)
 
 - feat(post): Add support for automatically adding heading anchor ID attributes to post types.
