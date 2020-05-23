@@ -339,8 +339,8 @@ class Poet
                     $GLOBALS['submenu']['tools.php'],
                     collect($item)->slice(0, 2)->push(
                         admin_url(
-                            is_string($menu->get($item[2])) ? $item[2] :
-                            Str::contains($item[2], '.php') ? $item[2] : Str::start($item[2], 'admin.php?page=')
+                            (is_string($menu->get($item[2])) ? $item[2] : Str::contains($item[2], '.php'))
+                                ? $item[2] : Str::start($item[2], 'admin.php?page=')
                         )
                     )->all()
                 );
