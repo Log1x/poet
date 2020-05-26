@@ -81,7 +81,7 @@ Optionally, Poet can also automatically add anchor `ID` attributes to post headi
 
 ```php
 'post' => [
-    'post' => ['anchor' => true],
+    'post' => ['anchors' => true],
 ],
 ```
 
