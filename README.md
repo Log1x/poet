@@ -4,7 +4,7 @@
 ![Build Status](https://img.shields.io/circleci/build/github/Log1x/poet?style=flat-square)
 ![Total Downloads](https://img.shields.io/packagist/dt/log1x/poet?style=flat-square)
 
-Poet provides simple configuration-based post type, taxonomy, user roles, editor color palette, block category, and block registration/modification.
+Poet provides simple configuration-based post type, taxonomy, editor color palette, block category, and block registration/modification.
 
 Blocks registered with Poet are rendered using Laravel Blade on the frontend giving you full control over rendered block markup.
 
@@ -265,26 +265,6 @@ You can unregister an existing block category by simply passing `false`:
 ```php
 'categories' => [
     'common' => false,
-],
-```
-
-### Registering User Roles
-
-Poet provides an easy to way register and unregister user roles. Looking in the config, you will see a commented out example for creating a "Janitor" role:
-
-```php
-'roles' => [
-    'janitor' => ['delete_posts', 'delete_pages'],
-],
-```
-
-Simply pass a slug along with an array of capabilities and Poet will take care of the rest.
-
-Like post types and categories, explicitly setting `false` to a user role will unregister it instead:
-
-```php
-'roles' => [
-  'editor' => false,
 ],
 ```
 
