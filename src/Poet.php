@@ -269,7 +269,7 @@ class Poet
     protected function registerPalette()
     {
         if (
-            (is_bool($palette = $this->config->get('palette')) && $palette === true) ||
+            (is_bool($palette = $this->config->get('palette')->pop()) && $palette === true) ||
             is_string($palette)
         ) {
             $palette = json_decode(
