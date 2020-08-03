@@ -39,7 +39,7 @@ class Poet
             $this->config->has('categories') && $this->registerCategories();
             $this->config->has('palette') && $this->registerPalette();
             $this->config->has('menu') && $this->registerMenu();
-        }, 20);
+        }, 10);
     }
 
     /**
