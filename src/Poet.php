@@ -106,14 +106,21 @@ class Poet
                 ->collapse()
                 ->each(function ($value, $key) {
                     if (
-                        ! Arr::get($value, 'anchors') ||
+                        ! $anchors = Arr::get($value, 'anchors') ||
                         ! (Str::is($key, get_post_type()) && is_singular())
                     ) {
                         return;
                     }
 
-                    return add_filter('the_content', function ($content) use ($value) {
-                        return (new MarkupFixer())->fix($content, ...Arr::get($value, 'anchors'));
+                    return add_filter('the_content', function ($content) use ($anchors) {
+                        $anchors = collect($anchors)->filter(function ($value) {
+                            return is_int($value);
+                        });
+
+                        return (new MarkupFixer())->fix(
+                            $content,
+                            ...$anchors->toArray()
+                        );
                     });
                 });
         }, 20);

@@ -1,3 +1,11 @@
+## v1.1.4 (09/22/20)
+
+- fix(anchors): Fix error when spreading optional anchor config
+
+## v1.1.3 (07/05/20)
+
+- fix(palette): Fix editor palette registration (Fixes #9)
+
 ## v1.1.2 (05/22/20)
 
 - fix(config): Allow for undefined configuration keys.
