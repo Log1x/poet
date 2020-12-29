@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1e6e0c9b71547eae7848bb08809f384",
+    "content-hash": "7bef00cba1d9e826f99695b4615a917e",
     "packages": [
         {
             "name": "caseyamcl/toc",
-            "version": "v2.3.1",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/caseyamcl/toc.git",
-                "reference": "68fd06c26086de4732bbe7a26ae1355afa0743c9"
+                "reference": "8eb23fcb5166b9cb957a7b8afba2b95b91e681f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/caseyamcl/toc/zipball/68fd06c26086de4732bbe7a26ae1355afa0743c9",
-                "reference": "68fd06c26086de4732bbe7a26ae1355afa0743c9",
+                "url": "https://api.github.com/repos/caseyamcl/toc/zipball/8eb23fcb5166b9cb957a7b8afba2b95b91e681f9",
+                "reference": "8eb23fcb5166b9cb957a7b8afba2b95b91e681f9",
                 "shasum": ""
             },
             "require": {
@@ -25,9 +25,11 @@
                 "ext-dom": "*",
                 "knplabs/knp-menu": "^3.0",
                 "masterminds/html5": "^2.1",
-                "php": "^7.1"
+                "php": "^7.1|^8.0"
             },
             "require-dev": {
+                "jaschilz/php-coverage-badger": "^2.0",
+                "phpstan/phpstan": "^0.12",
                 "phpunit/phpunit": "^7.5|^8.0|^9.0",
                 "squizlabs/php_codesniffer": "^3.5",
                 "twig/twig": "^2.4|^3.0"
@@ -36,8 +38,8 @@
             "autoload": {
                 "psr-4": {
                     "TOC\\": [
-                        "src/",
-                        "tests/"
+                        "src",
+                        "tests"
                     ]
                 }
             },
@@ -59,7 +61,7 @@
                 "TOC",
                 "table of contents"
             ],
-            "time": "2020-08-20T17:45:06+00:00"
+            "time": "2020-12-07T19:20:03+00:00"
         },
         {
             "name": "cocur/slugify",
