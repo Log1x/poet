@@ -65,12 +65,8 @@ class Poet
                     return register_extended_post_type(...Arr::wrap($value));
                 }
 
-                if ($this->exists($key)) {
-                    if ($value === false) {
-                        return $this->remove($key);
-                    }
-
-                    return $this->modify($key, $value);
+                if ($this->exists($key) && $value === false) {
+                    return $this->remove($key);
                 }
 
                 return register_extended_post_type(

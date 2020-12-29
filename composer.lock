@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "caseyamcl/toc",
-            "version": "v2.2",
+            "version": "v2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/caseyamcl/toc.git",
-                "reference": "27edd0deb48c73f30f8166d5021c9ab5c080f963"
+                "reference": "68fd06c26086de4732bbe7a26ae1355afa0743c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/caseyamcl/toc/zipball/27edd0deb48c73f30f8166d5021c9ab5c080f963",
-                "reference": "27edd0deb48c73f30f8166d5021c9ab5c080f963",
+                "url": "https://api.github.com/repos/caseyamcl/toc/zipball/68fd06c26086de4732bbe7a26ae1355afa0743c9",
+                "reference": "68fd06c26086de4732bbe7a26ae1355afa0743c9",
                 "shasum": ""
             },
             "require": {
@@ -28,7 +28,7 @@
                 "php": "^7.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^7.5|^8.0",
+                "phpunit/phpunit": "^7.5|^8.0|^9.0",
                 "squizlabs/php_codesniffer": "^3.5",
                 "twig/twig": "^2.4|^3.0"
             },
@@ -59,7 +59,7 @@
                 "TOC",
                 "table of contents"
             ],
-            "time": "2020-04-12T15:23:17+00:00"
+            "time": "2020-08-20T17:45:06+00:00"
         },
         {
             "name": "cocur/slugify",
@@ -133,32 +133,32 @@
         },
         {
             "name": "johnbillion/extended-cpts",
-            "version": "4.3.3",
+            "version": "4.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnbillion/extended-cpts.git",
-                "reference": "4c4e292781c28a7d8666803f63c44e655cddf7ad"
+                "reference": "b62d104bffbf9998a1063879565f61c289f0c6a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnbillion/extended-cpts/zipball/4c4e292781c28a7d8666803f63c44e655cddf7ad",
-                "reference": "4c4e292781c28a7d8666803f63c44e655cddf7ad",
+                "url": "https://api.github.com/repos/johnbillion/extended-cpts/zipball/b62d104bffbf9998a1063879565f61c289f0c6a9",
+                "reference": "b62d104bffbf9998a1063879565f61c289f0c6a9",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.0"
             },
             "require-dev": {
-                "automattic/phpcs-neutron-standard": "^1.5",
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.5",
+                "automattic/phpcs-neutron-standard": "1.5.4",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
                 "johnbillion/falsey-assertequals-detector": "^2",
                 "johnbillion/php-docs-standards": "^1",
                 "phpcompatibility/phpcompatibility-wp": "^2",
                 "phpunit/phpunit": "^6",
                 "roots/wordpress": "*",
                 "vlucas/phpdotenv": "^3",
-                "wp-cli/wp-cli-bundle": "^2.1",
-                "wp-coding-standards/wpcs": "~2.1.0",
+                "wp-cli/db-command": "^2.0",
+                "wp-coding-standards/wpcs": "2.3.0",
                 "wp-phpunit/wp-phpunit": "*"
             },
             "suggest": {
@@ -189,24 +189,30 @@
             ],
             "description": "A library which provides extended functionality to WordPress custom post types and taxonomies.",
             "homepage": "https://github.com/johnbillion/extended-cpts/",
-            "time": "2020-04-22T16:13:18+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/johnbillion",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-12-05T20:15:02+00:00"
         },
         {
             "name": "knplabs/knp-menu",
-            "version": "v3.1.1",
+            "version": "v3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
-                "reference": "254fb64d545f087451cc197a7fa5d47e03ffb038"
+                "reference": "9996764bc4bdc4381ecdc4617817de23948f0cdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/254fb64d545f087451cc197a7fa5d47e03ffb038",
-                "reference": "254fb64d545f087451cc197a7fa5d47e03ffb038",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/9996764bc4bdc4381ecdc4617817de23948f0cdb",
+                "reference": "9996764bc4bdc4381ecdc4617817de23948f0cdb",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2"
+                "php": "^7.2 || ^8.0"
             },
             "conflict": {
                 "twig/twig": "<1.40 || >=2,<2.9"
@@ -257,20 +263,20 @@
                 "menu",
                 "tree"
             ],
-            "time": "2020-04-22T14:37:23+00:00"
+            "time": "2020-08-15T08:01:46+00:00"
         },
         {
             "name": "masterminds/html5",
-            "version": "2.7.0",
+            "version": "2.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Masterminds/html5-php.git",
-                "reference": "104443ad663d15981225f99532ba73c2f1d6b6f2"
+                "reference": "9227822783c75406cfe400984b2f095cdf03d417"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/104443ad663d15981225f99532ba73c2f1d6b6f2",
-                "reference": "104443ad663d15981225f99532ba73c2f1d6b6f2",
+                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/9227822783c75406cfe400984b2f095cdf03d417",
+                "reference": "9227822783c75406cfe400984b2f095cdf03d417",
                 "shasum": ""
             },
             "require": {
@@ -280,9 +286,7 @@
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35",
-                "sami/sami": "~2.0",
-                "satooshi/php-coveralls": "1.0.*"
+                "phpunit/phpunit": "^4.8.35"
             },
             "type": "library",
             "extra": {
@@ -324,22 +328,22 @@
                 "serializer",
                 "xml"
             ],
-            "time": "2019-07-25T07:03:26+00:00"
+            "time": "2020-10-01T13:52:52+00:00"
         }
     ],
     "packages-dev": [
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.5.5",
+            "version": "3.5.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "73e2e7f57d958e7228fce50dc0c61f58f017f9f6"
+                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/73e2e7f57d958e7228fce50dc0c61f58f017f9f6",
-                "reference": "73e2e7f57d958e7228fce50dc0c61f58f017f9f6",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9d583721a7157ee997f235f327de038e7ea6dac4",
+                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4",
                 "shasum": ""
             },
             "require": {
@@ -377,7 +381,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2020-04-17T01:09:41+00:00"
+            "time": "2020-10-23T02:01:07+00:00"
         }
     ],
     "aliases": [],
