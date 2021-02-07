@@ -25,18 +25,16 @@ class AdminMenuModule extends AbstractModule
     public function handle()
     {
         add_filter('admin_menu', function () {
-            $menu = $this->config->get('menu');
-
-            if ($menu->isEmpty()) {
+            if ($this->config->isEmpty()) {
                 return;
             }
 
-            $GLOBALS['menu'] = $this->collect($GLOBALS['menu'])->map(function ($item) use ($menu) {
-                if (! $menu->contains(Str::afterLast($item[2], '='))) {
+            $GLOBALS['menu'] = $this->collect($GLOBALS['menu'])->map(function ($item) {
+                if (! $this->config->contains(Str::afterLast($item[2], '='))) {
                     return $item;
                 }
 
-                if ($menu->get($item[2]) === false) {
+                if ($this->config->get($item[2]) === false) {
                     return;
                 }
 
@@ -44,7 +42,7 @@ class AdminMenuModule extends AbstractModule
                     $GLOBALS['submenu']['tools.php'],
                     $this->collect($item)->slice(0, 2)->push(
                         admin_url(
-                            (is_string($menu->get($item[2])) ? $item[2] : Str::contains($item[2], '.php'))
+                            (is_string($this->config->get($item[2])) ? $item[2] : Str::contains($item[2], '.php'))
                                 ? $item[2] : Str::start($item[2], 'admin.php?page=')
                         )
                     )->all()

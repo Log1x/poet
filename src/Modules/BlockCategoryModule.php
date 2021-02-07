@@ -9,7 +9,7 @@ class BlockCategoryModule extends AbstractModule
     /**
      * The module key.
      *
-     * @param string[]
+     * @param string
      */
     protected $key = 'blockCategory';
 
@@ -25,10 +25,14 @@ class BlockCategoryModule extends AbstractModule
      */
     protected function registerCategories()
     {
+        if ($this->config->isEmpty()) {
+            return;
+        }
+
         add_filter('block_categories', function ($categories) {
             $categories = $this->collect($categories)->keyBy('slug');
 
-            return $this->config->get('categories')->map(function ($value, $key) use ($categories) {
+            return $this->config->map(function ($value, $key) use ($categories) {
                 if (empty($key) || is_int($key)) {
                     $key = $value;
                 }

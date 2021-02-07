@@ -36,9 +36,9 @@ class BlockModule extends AbstractModule
      *
      * @return void
      */
-    protected function registerBlocks()
+    protected function handle()
     {
-        return $this->config->get('block')->each(function ($value, $key) {
+        return $this->config->each(function ($value, $key) {
             if (empty($key) || is_int($key)) {
                 $key = $value;
             }
@@ -72,5 +72,18 @@ class BlockModule extends AbstractModule
         return (Str::slug(
             wp_get_theme()->get('TextDomain')
         ) ?? 'sage') . $delimiter;
+    }
+
+    /**
+     * Check if a string is empty after stripping tags and whitespace.
+     *
+     * @param  string $value
+     * @return bool
+     */
+    protected function isEmpty($value)
+    {
+        return empty(
+            wp_strip_all_tags($value, true)
+        );
     }
 }

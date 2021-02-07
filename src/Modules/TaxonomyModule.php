@@ -2,6 +2,7 @@
 
 namespace Log1x\Poet\Modules;
 
+use WP_Taxonomy;
 use Illuminate\Support\Arr;
 
 class TaxonomyModule extends AbstractModule

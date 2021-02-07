@@ -2,6 +2,7 @@
 
 namespace Log1x\Poet\Modules;
 
+use WP_Post_Type;
 use Illuminate\Support\Arr;
 
 class PostTypeModule extends AbstractModule
@@ -9,7 +10,7 @@ class PostTypeModule extends AbstractModule
     /**
      * The module key.
      *
-     * @param string[]
+     * @param string
      */
     protected $key = 'post';
 

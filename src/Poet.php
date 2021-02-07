@@ -106,28 +106,4 @@ class Poet
 
         return unregister_post_type($object);
     }
-
-    /**
-     * Check if an object is an instance of WP_Taxonomy.
-     *
-     * @param  mixed $object
-     * @return bool
-     */
-    protected function isTaxonomy($object)
-    {
-        return $object instanceof WP_Taxonomy;
-    }
-
-    /**
-     * Check if a string is empty after stripping tags and whitespace.
-     *
-     * @param  string $value
-     * @return bool
-     */
-    protected function isEmpty($value)
-    {
-        return empty(
-            wp_strip_all_tags($value, true)
-        );
-    }
 }
