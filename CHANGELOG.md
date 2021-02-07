@@ -1,3 +1,7 @@
+## v1.2.0 (02/06/21)
+
+- TBH
+
 ## v1.1.4 (09/22/20)
 
 - fix(anchors): Fix error when spreading optional anchor config

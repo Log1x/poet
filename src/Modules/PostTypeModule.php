@@ -4,14 +4,14 @@ namespace Log1x\Poet\Modules;
 
 use Illuminate\Support\Arr;
 
-class PostTypeModule extends Module
+class PostTypeModule extends AbstractModule
 {
     /**
      * The module key.
      *
      * @param string[]
      */
-    protected $key = ['post', 'post_type'];
+    protected $key = 'post';
 
     /**
      * Register the configured post types using Extended CPTs.
@@ -26,28 +26,27 @@ class PostTypeModule extends Module
      *
      * @return void
      */
-    protected function register()
+    public function handle()
     {
-        $this->config
-            ->each(function ($value, $key) {
-                if (empty($key) || is_int($key)) {
-                    return register_extended_post_type(...Arr::wrap($value));
+        $this->config->each(function ($value, $key) {
+            if (empty($key) || is_int($key)) {
+                return register_extended_post_type(...Arr::wrap($value));
+            }
+
+            if (post_type_exists($key)) {
+                if ($value === false) {
+                    return $this->unregisterPostType($key);
                 }
 
-                if (post_type_exists($key)) {
-                    if ($value === false) {
-                        return $this->unregisterPostType($key);
-                    }
+                return $this->modify($key, $value);
+            }
 
-                    return $this->modify($key, $value);
-                }
-
-                return register_extended_post_type(
-                    $key,
-                    $value,
-                    Arr::get($value, 'labels', [])
-                );
-            });
+            return register_extended_post_type(
+                $key,
+                $value,
+                Arr::get($value, 'labels', [])
+            );
+        });
     }
 
     /**

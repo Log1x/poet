@@ -4,14 +4,14 @@ namespace Log1x\Poet\Modules;
 
 use Illuminate\Support\Str;
 
-class AdminMenuModule extends Module
+class AdminMenuModule extends AbstractModule
 {
     /**
      * The module key.
      *
-     * @param string[]
+     * @param string
      */
-    protected $key = ['menu', 'adminMenu'];
+    protected $key = 'adminMenu';
 
     /**
      * Moves configured admin menu parent items into the Tools.php submenu.
@@ -22,7 +22,7 @@ class AdminMenuModule extends Module
      *
      * @return void
      */
-    public function register()
+    public function handle()
     {
         add_filter('admin_menu', function () {
             $menu = $this->config->get('menu');
@@ -31,7 +31,7 @@ class AdminMenuModule extends Module
                 return;
             }
 
-            $GLOBALS['menu'] = collect($GLOBALS['menu'])->map(function ($item) use ($menu) {
+            $GLOBALS['menu'] = $this->collect($GLOBALS['menu'])->map(function ($item) use ($menu) {
                 if (! $menu->contains(Str::afterLast($item[2], '='))) {
                     return $item;
                 }
@@ -42,7 +42,7 @@ class AdminMenuModule extends Module
 
                 array_push(
                     $GLOBALS['submenu']['tools.php'],
-                    collect($item)->slice(0, 2)->push(
+                    $this->collect($item)->slice(0, 2)->push(
                         admin_url(
                             (is_string($menu->get($item[2])) ? $item[2] : Str::contains($item[2], '.php'))
                                 ? $item[2] : Str::start($item[2], 'admin.php?page=')

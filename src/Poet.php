@@ -2,16 +2,23 @@
 
 namespace Log1x\Poet;
 
-use WP_Post_Type;
-use WP_Taxonomy;
-use TOC\MarkupFixer;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Log1x\Poet\Concerns\HasCollection;
+use Log1x\Poet\Modules\AbstractModule;
+use Log1x\Poet\Modules\AdminMenuModule;
+use Log1x\Poet\Modules\AnchorModule;
+use Log1x\Poet\Modules\BlockCategoryModule;
+use Log1x\Poet\Modules\BlockModule;
+use Log1x\Poet\Modules\EditorPaletteModule;
+use Log1x\Poet\Modules\PostTypeModule;
+use Log1x\Poet\Modules\TaxonomyModule;
 
 use function Roots\asset;
 
 class Poet
 {
+    use HasCollection;
+
     /**
      * The Poet configuration.
      *
@@ -25,13 +32,13 @@ class Poet
      * @var array
      */
     protected $modules = [
-        \Log1x\Poet\Modules\AdminMenuModule::class,
-        \Log1x\Poet\Modules\AnchorModule::class,
-        \Log1x\Poet\Modules\BlockCategoryModule::class,
-        \Log1x\Poet\Modules\BlockModule::class,
-        \Log1x\Poet\Modules\EditorPaletteModule::class,
-        \Log1x\Poet\Modules\PostTypeModule::class,
-        \Log1x\Poet\Modules\TaxonomyModule::class,
+        // AdminMenuModule::class,
+        // AnchorModule::class,
+        // BlockCategoryModule::class,
+        // BlockModule::class,
+        // EditorPaletteModule::class,
+        PostTypeModule::class,
+        TaxonomyModule::class,
     ];
 
     /**
@@ -42,8 +49,18 @@ class Poet
      */
     public function __construct($config = [])
     {
+        $this->config = $this->collect($config)->map(function ($value) {
+            return is_array($value) ? $this->collect($value) : $value;
+        });
+
         add_filter('init', function () {
-            //
+            foreach ($this->modules as $module) {
+                if ($module instanceof AbstractModule) {
+                    continue;
+                }
+
+                (new $module($this->config))->handle();
+            }
         }, 20);
     }
 
@@ -62,7 +79,7 @@ class Poet
             return;
         }
 
-        return collect($config)->map(function ($value, $key) use ($object) {
+        return $this->collect($config)->map(function ($value, $key) use ($object) {
             $object->{$key} = $value;
         });
     }
@@ -82,7 +99,7 @@ class Poet
         }
 
         if ($this->isTaxonomy($object)) {
-            return collect($object->object_type)->each(function ($key) use ($object) {
+            return $this->collect($object->object_type)->each(function ($key) use ($object) {
                 return unregister_taxonomy_for_object_type($object->name, $key) ?? unregister_taxonomy($object);
             });
         }

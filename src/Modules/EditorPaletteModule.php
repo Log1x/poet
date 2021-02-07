@@ -6,14 +6,14 @@ use Illuminate\Support\Str;
 
 use function Roots\asset;
 
-class EditorPaletteModule extends Module
+class EditorPaletteModule extends AbstractModule
 {
     /**
      * The module key.
      *
      * @param string[]
      */
-    protected $key = ['palette'];
+    protected $key = 'palette';
 
      /**
      * Register the configured color palette with the editor.
@@ -21,12 +21,9 @@ class EditorPaletteModule extends Module
      * @link https://developer.wordpress.org/block-editor/developers/themes/theme-support/#block-color-palettes
      * @return void
      */
-    protected function register()
+    public function handle()
     {
-        if (
-            (is_bool($palette = $this->config->get('palette')->pop()) && $palette === true) ||
-            is_string($palette)
-        ) {
+        if ($this->config === true || is_string($this->config)) {
             $palette = json_decode(
                 asset(Str::finish(is_string($palette) ? $palette : 'palette', '.json'))->contents(),
                 true
@@ -39,7 +36,7 @@ class EditorPaletteModule extends Module
             return add_theme_support('editor-color-palette', $palette);
         }
 
-        $palette = $this->config->get('palette')->map(function ($value, $key) {
+        $palette = $this->config->map(function ($value, $key) {
             if (! is_array($value)) {
                 return [
                     'name' => Str::title($key),

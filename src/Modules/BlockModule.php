@@ -6,14 +6,14 @@ use Illuminate\Support\Str;
 
 use function Roots\view;
 
-class BlockModule extends Module
+class BlockModule extends AbstractModule
 {
     /**
      * The module key.
      *
-     * @param string[]
+     * @param string
      */
-    protected $key = ['block', 'blocks'];
+    protected $key = 'block';
 
     /**
      * Register the configured block types with the editor using Blade
@@ -43,7 +43,7 @@ class BlockModule extends Module
                 $key = $value;
             }
 
-            $value = collect($value);
+            $value = $this->collect($value);
 
             if (! Str::contains($key, '/')) {
                 $key = Str::start($key, $this->namespace());

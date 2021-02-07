@@ -2,14 +2,17 @@
 
 namespace Log1x\Poet\Modules;
 
-use Illuminate\Support\Collection;
+use Log1x\Poet\Concerns\HasCollection;
+use Log1x\Poet\Contracts\Module;
 
-class Module
+class AbstractModule implements Module
 {
+    use HasCollection;
+
     /**
      * The module key.
      *
-     * @param string[]
+     * @param string
      */
     protected $key;
 
@@ -34,6 +37,5 @@ class Module
         }
 
         $this->config = $config->get($this->key);
-        $this->register();
     }
 }

@@ -4,14 +4,14 @@ namespace Log1x\Poet\Modules;
 
 use Illuminate\Support\Str;
 
-class BlockCategoryModule extends Module
+class BlockCategoryModule extends AbstractModule
 {
     /**
      * The module key.
      *
      * @param string[]
      */
-    protected $key = ['category', 'block_category'];
+    protected $key = 'blockCategory';
 
     /**
      * Register the configured block categories with the editor.
@@ -26,7 +26,7 @@ class BlockCategoryModule extends Module
     protected function registerCategories()
     {
         add_filter('block_categories', function ($categories) {
-            $categories = collect($categories)->keyBy('slug');
+            $categories = $this->collect($categories)->keyBy('slug');
 
             return $this->config->get('categories')->map(function ($value, $key) use ($categories) {
                 if (empty($key) || is_int($key)) {

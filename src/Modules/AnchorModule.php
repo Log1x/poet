@@ -4,14 +4,14 @@ namespace Log1x\Poet\Modules;
 
 use Illuminate\Support\Str;
 
-class AdminMenuModule extends Module
+class AdminMenuModule extends AbstractModule
 {
     /**
      * The module key.
      *
-     * @param string[]
+     * @param string
      */
-    protected $key = ['menu', 'adminMenu'];
+    protected $key = 'post';
 
     /**
      * Add anchor ID attributes to post content heading selectors
@@ -30,7 +30,7 @@ class AdminMenuModule extends Module
      *
      * @return void
      */
-    protected function register()
+    public function handle()
     {
         add_filter('the_post', function () {
             $this->config
@@ -45,7 +45,7 @@ class AdminMenuModule extends Module
                     }
 
                     return add_filter('the_content', function ($content) use ($anchors) {
-                        $anchors = collect($anchors)->filter(function ($value) {
+                        $anchors = $this->collect($anchors)->filter(function ($value) {
                             return is_int($value);
                         });
 

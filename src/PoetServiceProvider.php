@@ -14,7 +14,9 @@ class PoetServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('Log1x\Poet', function () {
-            return new Poet($this->app->config->get('poet'));
+            return new Poet(
+                $this->app->config->get('poet')
+            );
         });
     }
 

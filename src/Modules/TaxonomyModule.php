@@ -4,14 +4,14 @@ namespace Log1x\Poet\Modules;
 
 use Illuminate\Support\Arr;
 
-class TaxonomyModule extends Module
+class TaxonomyModule extends AbstractModule
 {
     /**
      * The module key.
      *
-     * @param string[]
+     * @param string
      */
-    protected $key = ['taxonomy'];
+    protected $key = 'taxonomy';
 
     /**
      * Register the configured taxomonies using Extended CPTs.
@@ -27,7 +27,7 @@ class TaxonomyModule extends Module
      *
      * @return void
      */
-    protected function register()
+    public function handle()
     {
         $this->config->each(function ($value, $key) {
             if (empty($key) || is_int($key)) {
