@@ -15,16 +15,7 @@ class TaxonomyModule extends AbstractModule
     protected $key = 'taxonomy';
 
     /**
-     * Register the configured taxomonies using Extended CPTs.
-     *   ↪ https://github.com/johnbillion/extended-cpts
-     *
-     * If a taxonomy already exists, the object will be modified instead.
-     *   ↪ https://developer.wordpress.org/reference/functions/get_taxonomy/
-     *
-     * If a taxonomy already exists and is set to `false`, the taxonomy
-     * will be unregistered.
-     *   ↪ https://developer.wordpress.org/reference/functions/unregister_taxonomy_for_object_type/
-     *     https://developer.wordpress.org/reference/functions/unregister_taxonomy/
+     * Handle the module.
      *
      * @return void
      */
@@ -35,12 +26,12 @@ class TaxonomyModule extends AbstractModule
                 return register_extended_taxonomy($value, 'post');
             }
 
-            if ($this->exists($key)) {
+            if ($this->hasTaxonomy($key)) {
                 if ($value === false) {
-                    return $this->remove($key);
+                    return $this->unregisterTaxonomy($key);
                 }
 
-                return $this->modify($key, $value);
+                return $this->modifyTaxonomy($key, $value);
             }
 
             return register_extended_taxonomy(
@@ -50,5 +41,69 @@ class TaxonomyModule extends AbstractModule
                 Arr::get($value, 'labels', [])
             );
         });
+    }
+
+    /**
+     * Determine if the object is a taxonomy.
+     *
+     * @param  mixed $object
+     * @return bool
+     */
+    protected function isTaxonomy($object)
+    {
+        return $object instanceof WP_Taxonomy;
+    }
+
+    /**
+     * Determine if the taxonomy exists.
+     *
+     * @param  string $name
+     * @return bool
+     */
+    protected function hasTaxonomy($name)
+    {
+        return post_type_exists($name);
+    }
+
+    /**
+     * Modify an existing taxonomy.
+     *
+     * @param  string $name
+     * @param  array  $config
+     * @return void
+     */
+    protected function modifyTaxonomy($name, $config)
+    {
+        $object = get_taxonomy($name);
+
+        if (! $this->isTaxonomy($object)) {
+            return;
+        }
+
+        foreach ($config as $key => $value) {
+            $object->{$key} = $value;
+        }
+    }
+
+    /**
+     * Unregister an existing taxonomy.
+     *
+     * @link https://developer.wordpress.org/reference/functions/unregister_taxonomy_for_object_type/
+     * @link https://developer.wordpress.org/reference/functions/unregister_taxonomy/
+     *
+     * @param  string $type
+     * @return void
+     */
+    protected function unregisterTaxonomy($type)
+    {
+        $object = get_taxonomy($type);
+
+        if (! $this->isTaxonomy($object)) {
+            return;
+        }
+
+        foreach ($object->object_type as $key) {
+            unregister_taxonomy_for_object_type($object->name, $key) ?? unregister_taxonomy($object);
+        }
     }
 }

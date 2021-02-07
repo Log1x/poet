@@ -15,17 +15,16 @@ class EditorPaletteModule extends AbstractModule
      */
     protected $key = 'palette';
 
-     /**
-     * Register the configured color palette with the editor.
+    /**
+     * Handle the module.
      *
-     * @link https://developer.wordpress.org/block-editor/developers/themes/theme-support/#block-color-palettes
      * @return void
      */
     public function handle()
     {
         if ($this->config === true || is_string($this->config)) {
             $palette = json_decode(
-                asset(Str::finish(is_string($palette) ? $palette : 'palette', '.json'))->contents(),
+                asset(Str::finish(is_string($this->config) ? $this->config : 'palette', '.json'))->contents(),
                 true
             );
 

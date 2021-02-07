@@ -15,15 +15,7 @@ class PostTypeModule extends AbstractModule
     protected $key = 'post';
 
     /**
-     * Register the configured post types using Extended CPTs.
-     *   ↪ https://github.com/johnbillion/extended-cpts
-     *
-     * If a post type already exists, the object will be modified instead.
-     *   ↪ https://codex.wordpress.org/Function_Reference/get_post_type_object
-     *
-     * If a post type already exists and is set to `false`, the post type
-     * will be unregistered.
-     *   ↪ https://developer.wordpress.org/reference/functions/unregister_post_type/
+     * Handle the module.
      *
      * @return void
      */
@@ -34,12 +26,12 @@ class PostTypeModule extends AbstractModule
                 return register_extended_post_type(...Arr::wrap($value));
             }
 
-            if (post_type_exists($key)) {
+            if ($this->hasPostType($key)) {
                 if ($value === false) {
                     return $this->unregisterPostType($key);
                 }
 
-                return $this->modify($key, $value);
+                return $this->modifyPostType($key, $value);
             }
 
             return register_extended_post_type(
@@ -51,7 +43,29 @@ class PostTypeModule extends AbstractModule
     }
 
     /**
-     * Modifies an existing post type or taxonomy object.
+     * Determine if the object is a post type.
+     *
+     * @param  mixed $object
+     * @return bool
+     */
+    protected function isPostType($object)
+    {
+        return $object instanceof WP_Post_Type;
+    }
+
+    /**
+     * Determine if the post type exists.
+     *
+     * @param  string $name
+     * @return bool
+     */
+    protected function hasPostType($name)
+    {
+        return post_type_exists($name);
+    }
+
+    /**
+     * Modifiy an existing post type.
      *
      * @param  string $name
      * @param  array  $config
@@ -61,7 +75,7 @@ class PostTypeModule extends AbstractModule
     {
         $object = get_post_type_object($name);
 
-        if (! $object instanceof WP_Post_Type) {
+        if (! $this->isPostType($object)) {
             return;
         }
 
@@ -80,7 +94,7 @@ class PostTypeModule extends AbstractModule
     {
         $object = get_post_type_object($type);
 
-        if (! $object instanceof WP_Post_Type) {
+        if (! $this->isPostType($object)) {
             return;
         }
 

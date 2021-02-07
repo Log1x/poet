@@ -16,27 +16,11 @@ class BlockModule extends AbstractModule
     protected $key = 'block';
 
     /**
-     * Register the configured block types with the editor using Blade
-     * for rendering the registered block.
-     *
-     * If no namespace is provided on the block, Poet will default to
-     * the current theme text domain.
-     *
-     * Optionally, you may pass a block as an array containing:
-     *   ↪ attributes – An array of custom block attributes.
-     *   ↪ strip – When set to false, `$content` will always return true.
-     *
-     * Given the Block `sage/accordion`, the Block view would be located at:
-     *   ↪ `views/blocks/accordion.blade.php`
-     *
-     * Block views have the following variables available:
-     *   ↪ $data    – An object containing the block data.
-     *   ↪ $content – A string containing the InnerBlocks content.
-     *                Returns `false` when empty.
+     * Handle the module.
      *
      * @return void
      */
-    protected function handle()
+    public function handle()
     {
         return $this->config->each(function ($value, $key) {
             if (empty($key) || is_int($key)) {

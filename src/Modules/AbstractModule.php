@@ -5,10 +5,18 @@ namespace Log1x\Poet\Modules;
 use Illuminate\Support\Collection;
 use Log1x\Poet\Concerns\HasCollection;
 use Log1x\Poet\Contracts\Module;
+use Roots\Acorn\Application;
 
-class AbstractModule implements Module
+abstract class AbstractModule implements Module
 {
     use HasCollection;
+
+    /**
+     * The Application instance.
+     *
+     * @var \Roots\Acorn\Application
+     */
+    protected $app;
 
     /**
      * The module key.
@@ -27,9 +35,10 @@ class AbstractModule implements Module
     /**
      * Initialize the Module instance.
      *
+     * @param  \Roots\Acorn\Application $app
      * @return void
      */
-    public function __construct(Collection $config)
+    public function __construct(Application $app, Collection $config)
     {
         if (empty($this->key)) {
             throw new LifecycleException(
@@ -37,16 +46,25 @@ class AbstractModule implements Module
             );
         }
 
+        $this->app = $app;
         $this->config = $config->get($this->key);
+
+        $this->boot();
     }
 
     /**
-     * Handle the module.
+     * Boot the module.
      *
-     * @return array
+     * @return void
      */
-    public function handle()
+    protected function boot()
     {
-        //
+        if (empty($this->config)) {
+            return;
+        }
+
+        $method = method_exists($this, 'handle') ? 'handle' : '__invoke';
+
+        $this->app->call([$this, $method]);
     }
 }

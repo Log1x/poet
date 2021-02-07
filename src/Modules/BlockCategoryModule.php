@@ -14,16 +14,11 @@ class BlockCategoryModule extends AbstractModule
     protected $key = 'blockCategory';
 
     /**
-     * Register the configured block categories with the editor.
-     *
-     * If a category already exists, it will be modified instead.
-     *
-     * If a category already exists and is set to `false`, the category
-     * will be unregistered.
+     * Handle the module.
      *
      * @return void
      */
-    protected function registerCategories()
+    public function handle()
     {
         if ($this->config->isEmpty()) {
             return;

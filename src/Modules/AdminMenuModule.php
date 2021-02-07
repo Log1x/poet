@@ -14,11 +14,7 @@ class AdminMenuModule extends AbstractModule
     protected $key = 'adminMenu';
 
     /**
-     * Moves configured admin menu parent items into the Tools.php submenu.
-     * Items are configured by simply passing the `page` slug of each plugin.
-     *
-     * If an item is explicitly set to `false`, the menu item will be
-     * removed entirely instead.
+     * Handle the module.
      *
      * @return void
      */
