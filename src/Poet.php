@@ -102,7 +102,7 @@ class Poet
                 ->collapse()
                 ->each(function ($value, $key) {
                     if (
-                        ! $anchors = Arr::get($value, 'anchors') ||
+                        ! ($anchors = Arr::get($value, 'anchors')) ||
                         ! (Str::is($key, get_post_type()) && is_singular())
                     ) {
                         return;
