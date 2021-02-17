@@ -77,14 +77,6 @@ To modify an existing post type, simply treat it as if you are creating a new po
 ],
 ```
 
-Optionally, Poet can also automatically add anchor `ID` attributes to post headings for configured post types by simply setting `anchor` to `true`:
-
-```php
-'post' => [
-    'post' => ['anchors' => true],
-],
-```
-
 It is also possible to unregister an existing post type by simply passing `false`:
 
 ```php
