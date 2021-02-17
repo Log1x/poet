@@ -15,7 +15,7 @@ If the passed post type or taxonomy already exists, Poet will automatically modi
 ## Requirements
 
 - [Sage](https://github.com/roots/sage) >= 10.0
-- [PHP](https://secure.php.net/manual/en/install.php) >= 7.2.5
+- [PHP](https://secure.php.net/manual/en/install.php) >= 7.3
 - [Composer](https://getcomposer.org/download/)
 
 ## Installation
