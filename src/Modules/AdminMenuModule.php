@@ -42,10 +42,10 @@ class AdminMenuModule extends AbstractModule
                     return [$value[2] => [$value[0], $value[3], $value[1], $this->config->get($key)]];
                 });
 
-           $menus->each(function ($value, $key) {
-               remove_menu_page($key);
-               add_submenu_page('tools.php', ...array_values($value));
-           });
+            $menus->each(function ($value, $key) {
+                remove_menu_page($key);
+                add_submenu_page('tools.php', ...array_values($value));
+            });
         }, 20);
     }
 }
