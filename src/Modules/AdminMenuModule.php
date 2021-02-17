@@ -9,7 +9,7 @@ class AdminMenuModule extends AbstractModule
     /**
      * The module key.
      *
-     * @param string
+     * @var string
      */
     protected $key = 'adminMenu';
 
@@ -21,29 +21,31 @@ class AdminMenuModule extends AbstractModule
     public function handle()
     {
         add_filter('admin_menu', function () {
+            $this->config = $this->config->mapWithKeys(function ($value, $key) {
+                $page = admin_url("admin.php?page={$value}");
+
+                return is_int($key) ? [$value => $page] : [$key => $page];
+            });
+
             if ($this->config->isEmpty()) {
                 return;
             }
 
-            $GLOBALS['menu'] = $this->collect($GLOBALS['menu'])->map(function ($item) {
-                if (! $this->config->contains(Str::afterLast($item[2], '='))) {
-                    return $item;
-                }
+            $menus = $this->collect($GLOBALS['menu'])
+                ->flatMap(function ($value) {
+                    $key = Str::afterLast($value[2], '=');
 
-                if ($this->config->get($item[2]) === false) {
-                    return;
-                }
+                    if (empty($this->config->get($key))) {
+                        return;
+                    }
 
-                array_push(
-                    $GLOBALS['submenu']['tools.php'],
-                    $this->collect($item)->slice(0, 2)->push(
-                        admin_url(
-                            (is_string($this->config->get($item[2])) ? $item[2] : Str::contains($item[2], '.php'))
-                                ? $item[2] : Str::start($item[2], 'admin.php?page=')
-                        )
-                    )->all()
-                );
-            })->filter()->all();
+                    return [$value[2] => [$value[0], $value[3], $value[1], $this->config->get($key)]];
+                });
+
+           $menus->each(function ($value, $key) {
+               remove_menu_page($key);
+               add_submenu_page('tools.php', ...array_values($value));
+           });
         }, 20);
     }
 }

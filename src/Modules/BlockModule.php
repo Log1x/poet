@@ -11,7 +11,7 @@ class BlockModule extends AbstractModule
     /**
      * The module key.
      *
-     * @param string
+     * @var string
      */
     protected $key = 'block';
 

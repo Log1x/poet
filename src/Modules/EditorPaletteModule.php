@@ -11,7 +11,7 @@ class EditorPaletteModule extends AbstractModule
     /**
      * The module key.
      *
-     * @param string
+     * @var string
      */
     protected $key = 'palette';
 

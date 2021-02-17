@@ -21,14 +21,14 @@ abstract class AbstractModule implements Module
     /**
      * The module key.
      *
-     * @param string
+     * @var string
      */
     protected $key;
 
     /**
      * The module config.
      *
-     * @param \Illuminate\Support\Collection
+     * @var \Illuminate\Support\Collection
      */
     protected $config;
 

@@ -10,7 +10,7 @@ class TaxonomyModule extends AbstractModule
     /**
      * The module key.
      *
-     * @param string
+     * @var string
      */
     protected $key = 'taxonomy';
 
