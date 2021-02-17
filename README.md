@@ -11,7 +11,8 @@ Poet provides simple configuration-based post type, taxonomy, editor color palet
 - Dead simple post type and taxonomy registration, modification, and unregistering powered by [Extended CPTs](https://github.com/johnbillion/extended-cpts).
 - Easy editor color palette configuration including built-in support for [webpack-palette-plugin](https://github.com/roots/palette-webpack-plugin).
 - Blocks registered are rendered using Laravel Blade on the frontend.
-- Easily add additional block categories with a single string.
+- Add additional block categories with nothing more than a slug.
+- Move parent admin menu items to the `Tools` submenu using their page slug.
 
 ## Requirements
 
