@@ -6,11 +6,12 @@
 
 Poet provides simple configuration-based post type, taxonomy, editor color palette, block category, and block registration/modification.
 
-Blocks registered with Poet are rendered using Laravel Blade on the frontend giving you full control over rendered block markup.
+## Features
 
-Post types and taxonomies are registered utilizing [Extended CPTs](https://github.com/johnbillion/extended-cpts).
-
-If the passed post type or taxonomy already exists, Poet will automatically modify their objects instead allowing easy manipulation of built-in post types/taxonomies.
+- Dead simple post type and taxonomy registration, modification, and unregistering powered by [Extended CPTs](https://github.com/johnbillion/extended-cpts).
+- Easy editor color palette configuration including built-in support for [webpack-palette-plugin](https://github.com/roots/palette-webpack-plugin).
+- Blocks registered are rendered using Laravel Blade on the frontend.
+- Easily add additional block categories with a single string.
 
 ## Requirements
 
