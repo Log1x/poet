@@ -87,6 +87,18 @@ It is also possible to unregister an existing post type by simply passing `false
 ],
 ```
 
+Optionally, you may also install the [caseyamcl/toc](https://github.com/caseyamcl/toc) package to enable automatic heading anchors on post types when setting `anchor` to `true.
+
+```bash
+$ composer require caseyamcl/toc
+```
+
+```php
+'post' => [
+  'post' => ['anchor' => true],
+],
+```
+
 Please note that some built-in post types (e.g. Post) can not be conventionally unregistered.
 
 For additional configuration options for post types, please see:
