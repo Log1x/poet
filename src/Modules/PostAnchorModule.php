@@ -3,7 +3,6 @@
 namespace Log1x\Poet\Modules;
 
 use Illuminate\Support\Arr;
-use TOC\MarkupFixer;
 
 class PostAnchorModule extends AbstractModule
 {
@@ -28,11 +27,17 @@ class PostAnchorModule extends AbstractModule
      */
     public function handle()
     {
-        $this->types = $this->config->filter(function ($value) {
-            return ! empty($value['anchor']);
-        })->mapWithKeys(function ($key, $value) {
+        if (! class_exists('\TOC\MarkupFixer')) {
+            return;
+        }
+
+        $this->types = $this->config->flatMap(function ($value, $key) {
+            if (empty($value['anchor'])) {
+                return;
+            }
+
             return [$key => $value['anchor']];
-        });
+        })->filter();
 
         if ($this->types->isEmpty()) {
             return;
@@ -41,14 +46,14 @@ class PostAnchorModule extends AbstractModule
         add_filter('the_content', function ($content) {
             if (
                 ! $type = $this->types->get(get_post_type()) ||
-                is_singular()
+                ! is_singular()
             ) {
-                return;
+                return $content;
             }
 
-            return (new MarkupFixer())->fix(
+            return (new \TOC\MarkupFixer())->fix(
                 $content,
-                is_array($type) ? ...$type : null
+                ...Arr::wrap($type)
             );
         }, 20);
     }

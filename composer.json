@@ -29,6 +29,9 @@
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.5"
   },
+  "suggest": {
+    "caseyamcl/toc": "Add support for heading anchors and table of contents to Poet (^3.0)."
+  },
   "extra": {
     "acorn": {
       "providers": [
