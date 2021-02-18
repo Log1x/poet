@@ -9,6 +9,7 @@ use Log1x\Poet\Modules\AdminMenuModule;
 use Log1x\Poet\Modules\BlockCategoryModule;
 use Log1x\Poet\Modules\BlockModule;
 use Log1x\Poet\Modules\EditorPaletteModule;
+use Log1x\Poet\Modules\PostAnchorModule;
 use Log1x\Poet\Modules\PostTypeModule;
 use Log1x\Poet\Modules\TaxonomyModule;
 use Roots\Acorn\Application;
@@ -43,6 +44,7 @@ class Poet
         BlockCategoryModule::class,
         BlockModule::class,
         EditorPaletteModule::class,
+        PostAnchorModule::class,
         PostTypeModule::class,
         TaxonomyModule::class,
     ];
