@@ -26,6 +26,10 @@ class PostTypeModule extends AbstractModule
                 return register_extended_post_type(...Arr::wrap($value));
             }
 
+            if (empty($value) && ! $this->hasPostType($key)) {
+                return;
+            }
+
             if ($this->hasPostType($key)) {
                 if ($value === false) {
                     return $this->unregisterPostType($key);

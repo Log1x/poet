@@ -64,13 +64,39 @@ class Poet
             });
 
         add_filter('init', function () {
-            foreach ($this->modules as $module) {
-                if ($module instanceof AbstractModule) {
-                    continue;
-                }
+            $this->register([
+                AdminMenuModule::class,
+                BlockCategoryModule::class,
+                BlockModule::class,
+                EditorPaletteModule::class,
+                PostTypeModule::class,
+                TaxonomyModule::class,
+            ]);
 
-                new $module($this->app, $this->config);
+            if (class_exists('\TOC\MarkupFixer')) {
+                $this->register(PostAnchorModule::class);
             }
         }, 20);
+    }
+
+    /**
+     * Register a Poet module.
+     *
+     * @param  string[] $modules
+     * @return void
+     */
+    public function register($modules = [])
+    {
+        if (! is_array($modules)) {
+            $modules = [$modules];
+        }
+
+        foreach ($modules as $module) {
+            if ($module instanceof AbstractModule) {
+                continue;
+            }
+
+            new $module($this->app, $this->config);
+        }
     }
 }

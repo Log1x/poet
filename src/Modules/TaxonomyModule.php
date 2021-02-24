@@ -26,6 +26,10 @@ class TaxonomyModule extends AbstractModule
                 return register_extended_taxonomy($value, 'post');
             }
 
+            if (empty($value) && ! $this->hasTaxonomy($key)) {
+                return;
+            }
+
             if ($this->hasTaxonomy($key)) {
                 if ($value === false) {
                     return $this->unregisterTaxonomy($key);
