@@ -11,7 +11,7 @@ class BlockCategoryModule extends AbstractModule
      *
      * @var string
      */
-    protected $key = 'blockCategory';
+    protected $key = 'block_category';
 
     /**
      * Handle the module.

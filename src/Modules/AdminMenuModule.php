@@ -11,7 +11,7 @@ class AdminMenuModule extends AbstractModule
      *
      * @var string
      */
-    protected $key = 'adminMenu';
+    protected $key = 'admin_menu';
 
     /**
      * Handle the module.

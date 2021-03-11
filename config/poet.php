@@ -79,7 +79,7 @@ return [
     |
     */
 
-    'blockCategories' => [
+    'block_categories' => [
         // 'cta' => [
         //     'title' => 'Call to Action',
         //     'icon' => 'star-filled',
@@ -124,7 +124,7 @@ return [
     |
     */
 
-    'adminMenu' => [
+    'admin_menu' => [
         // 'gutenberg',
     ],
 
