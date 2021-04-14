@@ -217,7 +217,7 @@ Consider an accordion block that is registered with a `title` and `className` at
 Poet provides an easy to way register, modify, and unregister Gutenberg block categories. Looking in the config, you will see a commented out example for a Call to Action category:
 
 ```php
-'block_categories' => [
+'block_category' => [
     'cta' => [
         'title' => 'Call to Action',
         'icon' => 'star-filled',
@@ -230,7 +230,7 @@ This would result in a block category with a slug of `cta`. Once your block cate
 In it's simplest form, you can simply pass a string:
 
 ```php
-'block_categories' => [
+'block_category' => [
     'my-cool-blocks',
 ],
 ```
@@ -240,7 +240,7 @@ which would result in a `my-cool-blocks` category automatically converting the s
 You can also specify the title by passing a value to your slug:
 
 ```php
-'block_categories' => [
+'block_category' => [
     'my-cool-blocks' => 'Best Blocks, World.',
 ],
 ```
@@ -248,7 +248,7 @@ You can also specify the title by passing a value to your slug:
 Like post types and taxonomies, modifying an existing block category is the same as registering one:
 
 ```php
-'block_categories' => [
+'block_category' => [
     'layouts' => 'Sections',
     'common' => ['icon' => 'star-filled'],
 ],
@@ -257,7 +257,7 @@ Like post types and taxonomies, modifying an existing block category is the same
 You can unregister an existing block category by simply passing `false`:
 
 ```php
-'block_categories' => [
+'block_category' => [
     'common' => false,
 ],
 ```
