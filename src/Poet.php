@@ -69,6 +69,6 @@ class Poet
 
                 new $module($this->app, $this->config);
             }
-        },19);
+        }, 19);
     }
 }
