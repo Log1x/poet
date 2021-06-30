@@ -62,7 +62,7 @@ class TaxonomyModule extends AbstractModule
      */
     protected function hasTaxonomy($name)
     {
-        return post_type_exists($name);
+        return taxonomy_exists($name);
     }
 
     /**
