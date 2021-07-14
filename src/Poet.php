@@ -43,8 +43,8 @@ class Poet
         BlockCategoryModule::class,
         BlockModule::class,
         EditorPaletteModule::class,
-        PostTypeModule::class,
         TaxonomyModule::class,
+        PostTypeModule::class,
     ];
 
     /**
