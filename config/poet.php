@@ -108,7 +108,24 @@ return [
         // 'sage/hero' => [
         //     'title' => 'Page Hero',
         //     'description' => 'Draw attention to the main focus of the page, and highlight key CTAs',
+        //     'categories' => ['all'],
         // ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Block Pattern Categories
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify block pattern categories to be registered by Poet for
+    | use in the editor.
+    |
+    */
+
+    'block_pattern_category' => [
+        'all' => [
+            'label' => 'All Patterns',
+        ],
     ],
 
     /*

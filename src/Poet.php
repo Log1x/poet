@@ -8,6 +8,7 @@ use Log1x\Poet\Modules\AbstractModule;
 use Log1x\Poet\Modules\AdminMenuModule;
 use Log1x\Poet\Modules\BlockCategoryModule;
 use Log1x\Poet\Modules\BlockModule;
+use Log1x\Poet\Modules\BlockPatternCategoryModule;
 use Log1x\Poet\Modules\BlockPatternModule;
 use Log1x\Poet\Modules\EditorPaletteModule;
 use Log1x\Poet\Modules\PostTypeModule;
@@ -44,6 +45,7 @@ class Poet
         BlockCategoryModule::class,
         BlockModule::class,
         BlockPatternModule::class,
+        BlockPatternCategoryModule::class,
         EditorPaletteModule::class,
         TaxonomyModule::class,
         PostTypeModule::class,
