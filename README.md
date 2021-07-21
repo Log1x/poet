@@ -280,6 +280,7 @@ Registering a block in most cases is as simple as:
     'sage/hero' => [
         'title' => 'Page Hero',
         'description' => 'Draw attention to the main focus of the page, and highlight key CTAs',
+        'categories' => ['all'],
     ],
 ],
 ```
@@ -291,6 +292,7 @@ You can register the actual content for the pattern here as well, using the `con
     'sage/fake-paragraph' => [
         'title' => 'Fake Paragraph',
         'description' => 'Filler content used instead of actual content for testing purposes',
+        'categories' => ['all'],
         'content' => '<!-- wp:paragraph --><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione nulla culpa repudiandae nisi nostrum et, labore earum repellendus porro, mollitia voluptas quam? Modi sint tempore deleniti nesciunt ab, perferendis et.</p><!-- /wp:paragraph -->',
     ],
 ],
@@ -307,6 +309,22 @@ This Block Pattern view may look like this:
 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione nulla culpa repudiandae nisi nostrum et, labore earum repellendus porro, mollitia voluptas quam? Modi sint tempore deleniti nesciunt ab, perferendis et.</p>
 <!-- /wp:paragraph -->
 ```
+
+### Registering a Block Pattern Category
+
+Block Pattern Categories can be added with the following code in the poet config:
+
+```php
+'block_pattern_category' => [
+    'all' => [
+        'label' => 'All Patterns',
+    ],
+],
+```
+
+You can specify all category properties such as `label`, as per the [block editor handbook](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-patterns/#register_block_pattern_category).
+
+> Note: Currently, if no Block Pattern Categories are available at all, the Block Patterns tab in the editor will crash when clicked on.
 
 ### Registering an Editor Color Palette
 
