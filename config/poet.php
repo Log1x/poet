@@ -88,6 +88,48 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Block Patterns
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify block patterns to be registered by Poet for use
+    | in the editor.
+    |
+    | Patterns are registered using the `namespace/label` defined when
+    | registering the block with the editor. If no namespace is provided,
+    | the current theme text domain will be used instead.
+    |
+    | Given the pattern `sage/hero`, your pattern content would be located at:
+    |   ↪ `views/block-patterns/hero.blade.php`
+    |
+    | See: https://developer.wordpress.org/reference/functions/register_block_pattern/
+    */
+
+    'block_pattern' => [
+        // 'sage/hero' => [
+        //     'title' => 'Page Hero',
+        //     'description' => 'Draw attention to the main focus of the page, and highlight key CTAs',
+        //     'categories' => ['all'],
+        // ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Block Pattern Categories
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify block pattern categories to be registered by Poet for
+    | use in the editor.
+    |
+    */
+
+    'block_pattern_category' => [
+        'all' => [
+            'label' => 'All Patterns',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Editor Palette
     |--------------------------------------------------------------------------
     |

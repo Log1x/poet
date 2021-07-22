@@ -3,11 +3,14 @@
 namespace Log1x\Poet\Modules;
 
 use Illuminate\Support\Str;
+use Log1x\Poet\Concerns\HasNamespace;
 
 use function Roots\view;
 
 class BlockModule extends AbstractModule
 {
+    use HasNamespace;
+
     /**
      * The module key.
      *
@@ -43,19 +46,6 @@ class BlockModule extends AbstractModule
                 },
             ]);
         });
-    }
-
-    /**
-     * Use the current theme's text domain as a namespace.
-     *
-     * @param  string $delimiter
-     * @return string
-     */
-    protected function namespace($delimiter = '/')
-    {
-        return (Str::slug(
-            wp_get_theme()->get('TextDomain')
-        ) ?? 'sage') . $delimiter;
     }
 
     /**

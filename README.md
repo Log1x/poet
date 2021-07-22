@@ -4,13 +4,14 @@
 ![Build Status](https://img.shields.io/github/workflow/status/log1x/poet/Main?style=flat-square)
 ![Total Downloads](https://img.shields.io/packagist/dt/log1x/poet?style=flat-square)
 
-Poet provides simple configuration-based post type, taxonomy, editor color palette, block category, and block registration/modification.
+Poet provides simple configuration-based post type, taxonomy, editor color palette, block category, block pattern and block registration/modification.
 
 ## Features
 
 - Dead simple post type and taxonomy registration, modification, and unregistering powered by [Extended CPTs](https://github.com/johnbillion/extended-cpts).
 - Easy editor color palette configuration including built-in support for [webpack-palette-plugin](https://github.com/roots/palette-webpack-plugin).
 - Blocks registered are rendered using Laravel Blade on the frontend.
+- Block Patterns registered can have their content defined using Laravel Blade too.
 - Add additional block categories with nothing more than a slug.
 - Move parent admin menu items to the `Tools` submenu using their page slug.
 
@@ -263,6 +264,67 @@ You can unregister an existing block category by simply passing `false`:
     'common' => false,
 ],
 ```
+
+### Registering a Block Pattern
+
+Poet can also register Block Patterns for you, with an optional Blade view for the content.
+
+Patterns are registered using the `namespace/label` defined when [registering the pattern with the editor](https://developer.wordpress.org/reference/functions/register_block_pattern/).
+
+If no namespace is provided, the current theme's [text domain](https://developer.wordpress.org/themes/functionality/internationalization/#loading-text-domain) will be used instead.
+
+Registering a block in most cases is as simple as:
+
+```php
+'block_pattern' => [
+    'sage/hero' => [
+        'title' => 'Page Hero',
+        'description' => 'Draw attention to the main focus of the page, and highlight key CTAs',
+        'categories' => ['all'],
+    ],
+],
+```
+
+You can register the actual content for the pattern here as well, using the `content` key. Or leave it blank to use a corresponding blade view.
+
+```php
+'block_pattern' => [
+    'sage/fake-paragraph' => [
+        'title' => 'Fake Paragraph',
+        'description' => 'Filler content used instead of actual content for testing purposes',
+        'categories' => ['all'],
+        'content' => '<!-- wp:paragraph --><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione nulla culpa repudiandae nisi nostrum et, labore earum repellendus porro, mollitia voluptas quam? Modi sint tempore deleniti nesciunt ab, perferendis et.</p><!-- /wp:paragraph -->',
+    ],
+],
+```
+
+#### Creating a Pattern View
+
+Given the block `sage/fake-paragraph`, if no `content` key is defined, then your accompanying Blade view would be located at `views/block-patterns/fake-paragraph.blade.php`.
+
+This Block Pattern view may look like this:
+
+```php
+<!-- wp:paragraph -->
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione nulla culpa repudiandae nisi nostrum et, labore earum repellendus porro, mollitia voluptas quam? Modi sint tempore deleniti nesciunt ab, perferendis et.</p>
+<!-- /wp:paragraph -->
+```
+
+### Registering a Block Pattern Category
+
+Block Pattern Categories can be added with the following code in the poet config:
+
+```php
+'block_pattern_category' => [
+    'all' => [
+        'label' => 'All Patterns',
+    ],
+],
+```
+
+You can specify all category properties such as `label`, as per the [block editor handbook](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-patterns/#register_block_pattern_category).
+
+> Note: Currently, if no Block Pattern Categories are available at all, the Block Patterns tab in the editor will crash when clicked on.
 
 ### Registering an Editor Color Palette
 
