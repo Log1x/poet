@@ -20,18 +20,17 @@ class BlockPatternCategoryModule extends AbstractModule
      */
     public function handle()
     {
-        /** No need to load block pattern categories when loading the website frontend */
-        if (!is_admin() || !class_exists('WP_Block_Patterns_Registry')) {
+        if (! is_admin() || ! class_exists('WP_Block_Patterns_Registry')) {
             return;
         }
 
-        return $this->config->each(function ($categoryData, $categorySlug) {
-            if (empty($categorySlug) || is_int($categorySlug)) {
-                $categorySlug = $categoryData;
-                $categoryData = [];
+        return $this->config->each(function ($value, $key) {
+            if (empty($key) || is_int($key)) {
+                $key = $value;
+                $value = [];
             }
 
-            register_block_pattern_category(Str::slug($categorySlug), $categoryData);
+            register_block_pattern_category(Str::slug($key), $value);
         });
     }
 }

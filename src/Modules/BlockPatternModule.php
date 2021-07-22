@@ -4,6 +4,7 @@ namespace Log1x\Poet\Modules;
 
 use Illuminate\Support\Str;
 use Log1x\Poet\Concerns\HasNamespace;
+
 use function Roots\view;
 
 class BlockPatternModule extends AbstractModule
@@ -24,33 +25,32 @@ class BlockPatternModule extends AbstractModule
      */
     public function handle()
     {
-        /** No need to load block patterns when loading the website frontend */
-        if (!is_admin() || !class_exists('WP_Block_Patterns_Registry')) {
+        if (! is_admin() || ! class_exists('WP_Block_Patterns_Registry')) {
             return;
         }
 
-        return $this->config->each(function ($patternData, $patternSlug) {
-            if (empty($patternSlug) || is_int($patternSlug)) {
+        return $this->config->each(function ($value, $key) {
+            if (empty($key) || is_int($key)) {
                 return;
             }
 
-            $patternData = $this->collect($patternData);
+            $value = $this->collect($value);
 
-            if (!Str::contains($patternSlug, '/')) {
-                $patternSlug = Str::start($patternSlug, $this->namespace());
+            if (! Str::contains($key, '/')) {
+                $key = Str::start($key, $this->namespace());
             }
 
-            $viewSlug = 'block-patterns.' . Str::after($patternSlug, '/');
+            $view = 'block-patterns.' . Str::after($key, '/');
 
-            if (!view()->exists($viewSlug)) {
+            if (! view()->exists($view)) {
                 return;
             }
 
-            if (!$patternData->has('content')) {
-                $patternData['content'] = view($viewSlug)->render();
+            if (! $value->has('content')) {
+                $value['content'] = view($view)->render();
             }
 
-            return register_block_pattern($patternSlug, $patternData->all());
+            return register_block_pattern($key, $value->all());
         });
     }
 }
