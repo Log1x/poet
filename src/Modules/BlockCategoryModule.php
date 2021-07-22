@@ -24,7 +24,7 @@ class BlockCategoryModule extends AbstractModule
             return;
         }
 
-        add_filter('block_categories', function ($categories) {
+        add_filter('block_categories_all', function ($categories) {
             $categories = $this->collect($categories)->keyBy('slug');
 
             return $this->config->map(function ($value, $key) use ($categories) {
