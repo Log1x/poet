@@ -2,6 +2,7 @@
 
 namespace Log1x\Poet\Modules;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class BlockCategoryModule extends AbstractModule
@@ -24,7 +25,7 @@ class BlockCategoryModule extends AbstractModule
             return;
         }
 
-        add_filter('block_categories', function ($categories) {
+        add_filter($this->hook(), function ($categories) {
             $categories = $this->collect($categories)->keyBy('slug');
 
             return $this->config->map(function ($value, $key) use ($categories) {
@@ -67,5 +68,19 @@ class BlockCategoryModule extends AbstractModule
             ->values()
             ->all();
         });
+    }
+
+    /**
+     * Retrieve the `block_categories` hook based on the current Wordpress version.
+     *
+     * @return string
+     */
+    protected function hook()
+    {
+        return version_compare(
+            Arr::get($GLOBALS, 'wp_version'),
+            '5.8-beta0',
+            '<'
+        ) ? 'block_categories' : 'block_categories_all';
     }
 }
