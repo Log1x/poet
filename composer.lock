@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "johnbillion/extended-cpts",
-            "version": "4.5.1",
+            "version": "4.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnbillion/extended-cpts.git",
-                "reference": "b8aef5ef64335d51784e391c9393145f50482fb4"
+                "reference": "59ce9f4e0422512eec6f698ccba4a6a81b018fdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnbillion/extended-cpts/zipball/b8aef5ef64335d51784e391c9393145f50482fb4",
-                "reference": "b8aef5ef64335d51784e391c9393145f50482fb4",
+                "url": "https://api.github.com/repos/johnbillion/extended-cpts/zipball/59ce9f4e0422512eec6f698ccba4a6a81b018fdb",
+                "reference": "59ce9f4e0422512eec6f698ccba4a6a81b018fdb",
                 "shasum": ""
             },
             "require": {
@@ -29,11 +29,11 @@
                 "johnbillion/falsey-assertequals-detector": "^2",
                 "phpcompatibility/phpcompatibility-wp": "^2",
                 "phpunit/phpunit": "^6",
-                "roots/wordpress": "*",
+                "roots/wordpress": "^5.7.0",
                 "vlucas/phpdotenv": "^3",
                 "wp-cli/db-command": "^2.0",
                 "wp-coding-standards/wpcs": "2.3.0",
-                "wp-phpunit/wp-phpunit": "*"
+                "wp-phpunit/wp-phpunit": "^5.7.0"
             },
             "suggest": {
                 "seravo/wp-custom-bulk-actions": "Custom Bulk Actions",
@@ -65,7 +65,7 @@
             "homepage": "https://github.com/johnbillion/extended-cpts/",
             "support": {
                 "issues": "https://github.com/johnbillion/extended-cpts/issues",
-                "source": "https://github.com/johnbillion/extended-cpts/tree/4.5.1"
+                "source": "https://github.com/johnbillion/extended-cpts/tree/4.5.2"
             },
             "funding": [
                 {
@@ -73,22 +73,22 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-01-26T10:10:55+00:00"
+            "time": "2021-03-21T00:26:19+00:00"
         }
     ],
     "packages-dev": [
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.5.8",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4"
+                "reference": "ffced0d2c8fa8e6cdc4d695a743271fab6c38625"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9d583721a7157ee997f235f327de038e7ea6dac4",
-                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/ffced0d2c8fa8e6cdc4d695a743271fab6c38625",
+                "reference": "ffced0d2c8fa8e6cdc4d695a743271fab6c38625",
                 "shasum": ""
             },
             "require": {
@@ -131,7 +131,7 @@
                 "source": "https://github.com/squizlabs/PHP_CodeSniffer",
                 "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
             },
-            "time": "2020-10-23T02:01:07+00:00"
+            "time": "2021-04-09T00:54:41+00:00"
         }
     ],
     "aliases": [],
@@ -143,5 +143,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
