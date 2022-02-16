@@ -18,7 +18,7 @@ Poet provides simple configuration-based post type, taxonomy, editor color palet
 ## Requirements
 
 - [Sage](https://github.com/roots/sage) >= 10.0
-- [PHP](https://secure.php.net/manual/en/install.php) >= 7.3
+- [PHP](https://secure.php.net/manual/en/install.php) >= 7.4
 - [Composer](https://getcomposer.org/download/)
 
 ## Installation
