@@ -25,7 +25,7 @@ class BlockPatternModule extends AbstractModule
      */
     public function handle()
     {
-        if (! is_admin() || ! class_exists('WP_Block_Patterns_Registry')) {
+        if (! class_exists('WP_Block_Patterns_Registry')) {
             return;
         }
 
