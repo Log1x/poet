@@ -146,7 +146,7 @@ Also like post types, you can easily unregister an existing taxonomy by simply p
 
 For additional configuration options for taxonomies, please see:
 
-- [`register_taxonomy()`](https://codex.wordpress.org/Function_Reference/register_taxonomy)
+- [`register_taxonomy()`](https://developer.wordpress.org/reference/functions/register_taxonomy/)
 - [`register_extended_taxonomy()`](https://github.com/johnbillion/extended-cpts/wiki/Registering-taxonomies)
 
 > **Note**: Do not nest configuration in a `config` key like shown in the Extended CPTs documentation.
