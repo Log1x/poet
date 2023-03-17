@@ -110,7 +110,7 @@ Registering a taxonomy is similar to a post type. Looking in `config/poet.php`, 
 ],
 ```
 
-The most relevent configuration option is `links` which defines the post type the taxonomy is connected to. If no link is specified, it will default to `post`.
+The most relevant configuration option is `links` which defines the post type the taxonomy is connected to. If no link is specified, it will default to `post`.
 
 To view an archive for the Genre taxonomy, copy the Blade template called `archive.blade.php` to a new file called `taxonomy-genre.blade.php`.
 
