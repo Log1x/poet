@@ -13,6 +13,7 @@ use Log1x\Poet\Modules\BlockPatternModule;
 use Log1x\Poet\Modules\EditorPaletteModule;
 use Log1x\Poet\Modules\PostTypeModule;
 use Log1x\Poet\Modules\TaxonomyModule;
+use Log1x\Poet\Modules\UserRoleModule;
 use Roots\Acorn\Application;
 
 use function Roots\asset;
@@ -49,6 +50,7 @@ class Poet
         EditorPaletteModule::class,
         TaxonomyModule::class,
         PostTypeModule::class,
+        UserRoleModule::class,
     ];
 
     /**
