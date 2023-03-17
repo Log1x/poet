@@ -151,6 +151,33 @@ For additional configuration options for taxonomies, please see:
 
 > **Note**: Do not nest configuration in a `config` key like shown in the Extended CPTs documentation.
 
+### Registering a User Role
+
+Registering a user role is similar as a post type or a taxonomy. Looking in `config/poet.php`, you will see a librarian user role:
+
+```php
+'user_role' => [
+    'librarian' => [
+        'display_name' => 'Librarian',
+        'capabilities' => ['read', 'edit_books', 'publish_books', 'edit_others_books'],
+    ],
+],
+```
+
+Also like post types and taxonomies, you can easily unregister an existing user role by simply passing `false`:
+
+```php
+'user_role' => [
+    'editor' => false,
+    'subscriber' => false,
+],
+```
+
+Please see the WordPress functions for more information:
+
+- [`add_role()`](https://developer.wordpress.org/reference/functions/add_role/)
+- [`remove_role()`](https://developer.wordpress.org/reference/functions/remove_role/)
+
 ### Registering a Block
 
 Poet provides an easy way to register a Gutenberg block with the editor using an accompanying Blade view for rendering the block on the frontend.
