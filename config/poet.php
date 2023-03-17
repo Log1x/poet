@@ -23,6 +23,7 @@ return [
                 'singular' => 'Book',
                 'plural' => 'Books',
             ],
+            'capability_type'   => 'book',
         ],
     ],
 
@@ -40,6 +41,23 @@ return [
         'genre' => [
             'links' => ['book'],
             'meta_box' => 'radio',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | User Roles
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the user roles to be registered by Poet using the
+    | add_role function.
+    |
+    */
+
+    'user_role' => [
+        'librarian' => [
+            'display_name' => 'Librarian',
+            'capabilities' => ['read', 'edit_books', 'publish_books', 'edit_others_books'],
         ],
     ],
 
