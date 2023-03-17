@@ -49,8 +49,7 @@ return [
     | User Roles
     |--------------------------------------------------------------------------
     |
-    | Here you may specify the user roles to be registered by Poet using the
-    | add_role function.
+    | Here you may specify the user roles to be registered or removed by Poet
     |
     */
 
@@ -59,6 +58,7 @@ return [
             'display_name' => 'Librarian',
             'capabilities' => ['read', 'edit_books', 'publish_books', 'edit_others_books'],
         ],
+        // 'editor' => false,
     ],
 
     /*

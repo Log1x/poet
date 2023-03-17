@@ -22,6 +22,11 @@ class UserRoleModule extends AbstractModule
     public function handle()
     {
         $this->config->each(function ($value, $key) {
+            if ($value === false) {
+                remove_role($key);
+                return;
+            }
+
             $displayName = $value['display_name'] ?? Str::title($key);
             $capabilities = $value['capabilities'] ?? ['read'];
             if (!is_array($capabilities)) {
