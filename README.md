@@ -177,7 +177,7 @@ Also like post types and taxonomies, you can easily unregister an existing user 
 
 Don't worry, [we are not making a database query on every page load](https://developer.wordpress.org/reference/functions/add_role/#comment-3194) - only when WP_DEBUG is set to true.
 
-If WP_DEBUG is false - as it should be in production and staging - the registration/unregistration of user roles is automatically triggered via [Trellis](https://roots.io/trellis/).
+If WP_DEBUG is false - as it should be in production and staging - the registration/unregistration of user roles is automatically triggered via [Trellis](https://roots.io/trellis/) after a successful deploy.
 
 ##### Not using Trellis?
 
