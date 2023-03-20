@@ -23,6 +23,11 @@ class UserRoleModule extends AbstractModule
     {
         $action = apply_filters('poet_user_roles_triggering_action', 'stylesheet_root');
         $this->config->each(function ($value, $key) {
+            if (defined('WP_DEBUG') && \WP_DEBUG) {
+                $this->updateUserRoles($value, $key);
+                return;
+            }
+
             add_action("update_option_{$action}", [$this, 'updateUserRoles', $value, $key]);
             //For multisite installations
             add_action(
