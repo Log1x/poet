@@ -24,7 +24,11 @@ class UserRoleModule extends AbstractModule
         $action = apply_filters('poet_user_roles_triggering_action', 'stylesheet_root');
         $this->config->each(function ($value, $key) {
             add_action("update_option_{$action}", [$this, 'updateUserRoles', $value, $key]);
-            add_action("update_site_option_{$action}", [$this, 'updateUserRoles', $value, $key]); //For multisite installations
+            //For multisite installations
+            add_action(
+                "update_site_option_{$action}",
+                [$this, 'updateUserRoles', $value, $key],
+            );
         });
     }
 
