@@ -50,6 +50,8 @@ class UserRoleModule extends AbstractModule
             $capabilities = $this->enableUserCapabilities($capabilities);
         }
 
+        // Make sure that capabilities are refreshed
+        remove_role($key);
         add_role($key, $displayName, $capabilities);
     }
 
