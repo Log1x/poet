@@ -21,47 +21,34 @@ class UserRoleModule extends AbstractModule
      */
     public function handle()
     {
-        $action = apply_filters('poet_user_roles_triggering_action', 'stylesheet_root');
         $this->config->each(function ($value, $key) {
-            if (defined('WP_DEBUG') && \WP_DEBUG) {
-                $this->updateUserRoles($value, $key);
+            /**
+             * Avoids slow database query
+             * https://developer.wordpress.org/reference/functions/add_role/#comment-3194
+             */
+            if (wp_roles()->is_role($key)) {
+                if ($value === false) {
+                    remove_role($key);
+                }
                 return;
             }
 
-            add_action("update_option_{$action}", [$this, 'updateUserRoles', $value, $key]);
-            //For multisite installations
-            add_action(
-                "update_site_option_{$action}",
-                [$this, 'updateUserRoles', $value, $key],
-            );
+            if ($value === false) {
+                return;
+            }
+
+            $displayName = $value['display_name'] ?? Str::title($key);
+            $capabilities = $value['capabilities'] ?? ['read'];
+            if (!is_array($capabilities)) {
+                wp_die(esc_html__('Expected capabilities fields to be an array'));
+            }
+
+            if (!Arr::isAssoc($capabilities)) {
+                $capabilities = $this->enableUserCapabilities($capabilities);
+            }
+
+            add_role($key, $displayName, $capabilities);
         });
-    }
-
-    /**
-     * Updates the current user roles
-     *
-     * @return void
-     */
-    public function updateUserRoles($value, $key)
-    {
-        if ($value === false) {
-            remove_role($key);
-            return;
-        }
-
-        $displayName = $value['display_name'] ?? Str::title($key);
-        $capabilities = $value['capabilities'] ?? ['read'];
-        if (!is_array($capabilities)) {
-            wp_die(esc_html__('Expected capabilities fields to be an array'));
-        }
-
-        if (!Arr::isAssoc($capabilities)) {
-            $capabilities = $this->enableUserCapabilities($capabilities);
-        }
-
-        // Make sure that capabilities are refreshed
-        remove_role($key);
-        add_role($key, $displayName, $capabilities);
     }
 
     /**
