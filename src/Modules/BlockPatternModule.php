@@ -42,11 +42,7 @@ class BlockPatternModule extends AbstractModule
 
             $view = 'block-patterns.' . Str::after($key, '/');
 
-            if (! view()->exists($view)) {
-                return;
-            }
-
-            if (! $value->has('content')) {
+            if (view()->exists($view)) {
                 $value['content'] = view($view)->render();
             }
 
