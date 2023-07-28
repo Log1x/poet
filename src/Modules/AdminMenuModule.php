@@ -22,7 +22,8 @@ class AdminMenuModule extends AbstractModule
     {
         add_filter('admin_menu', function () {
             $this->config = $this->config->mapWithKeys(function ($value, $key) {
-                $page = admin_url("admin.php?page={$value}");
+                $url = post_type_exists($value) ? "edit.php?post_type={$value}" : "admin.php?page={$value}";
+                $page = admin_url($url);
 
                 return is_int($key) ? [$value => $page] : [$key => $page];
             });
