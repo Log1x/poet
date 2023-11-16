@@ -2,7 +2,7 @@
 
 namespace Log1x\Poet;
 
-use Roots\Acorn\ServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
 class PoetServiceProvider extends ServiceProvider
 {
