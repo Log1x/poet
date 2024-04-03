@@ -44,7 +44,7 @@ class BlockModule extends AbstractModule
                         'content' => $value->get('strip', true) && $this->isEmpty($content) ? false : $content
                     ]);
                 },
-            ]);
+            ] + $value->except(['attributes', 'render_callback'])->all());
         });
     }
 
