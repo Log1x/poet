@@ -73,6 +73,6 @@ class Poet
 
                 new $module($this->app, $this->config);
             }
-        });
+        }, $this->app->config->get('poet.hookPriority', 4));
     }
 }
