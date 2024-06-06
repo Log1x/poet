@@ -110,7 +110,7 @@ Registering a taxonomy is similar to a post type. Looking in `config/poet.php`, 
 ],
 ```
 
-The most relevent configuration option is `links` which defines the post type the taxonomy is connected to. If no link is specified, it will default to `post`.
+The most relevant configuration option is `links` which defines the post type the taxonomy is connected to. If no link is specified, it will default to `post`.
 
 To view an archive for the Genre taxonomy, copy the Blade template called `archive.blade.php` to a new file called `taxonomy-genre.blade.php`.
 
@@ -150,6 +150,35 @@ For additional configuration options for taxonomies, please see:
 - [`register_extended_taxonomy()`](https://github.com/johnbillion/extended-cpts/wiki/Registering-taxonomies)
 
 > **Note**: Do not nest configuration in a `config` key like shown in the Extended CPTs documentation.
+
+### Registering a User Role
+
+Registering a user role is similar as a post type or a taxonomy. Looking in `config/poet.php`, you will see a librarian user role:
+
+```php
+'user_role' => [
+    'librarian' => [
+        'display_name' => 'Librarian',
+        'capabilities' => ['read', 'edit_books', 'publish_books', 'edit_others_books'],
+    ],
+],
+```
+
+Also like post types and taxonomies, you can easily unregister an existing user role by simply passing `false`:
+
+```php
+'user_role' => [
+    'editor' => false,
+    'subscriber' => false,
+],
+```
+
+Don't worry, [we are not making a database query on every page load](https://developer.wordpress.org/reference/functions/add_role/#comment-3194). We take advantage of the [wp_roles()->is_role($slug)](https://developer.wordpress.org/reference/classes/wp_roles/is_role/) function to avoid unnecessary database queries.
+
+Please see the WordPress functions for more information:
+
+- [`add_role()`](https://developer.wordpress.org/reference/functions/add_role/)
+- [`remove_role()`](https://developer.wordpress.org/reference/functions/remove_role/)
 
 ### Registering a Block
 
